@@ -23,7 +23,7 @@ export const DEMO_TRACKS = [
     id: "101" as const,
     title: "101",
     description:
-      "Ask → Plan → Agent, then /model, /debug, /create-rule, and /create-skill: orient on Ledgerly, plan and build a customer email update, change the model, fix a failing test, and add a project rule and skill.",
+      "Ask → Plan → Agent, then /model, /debug, /create-rule, /create-skill, MCP server, run control, and Canvas: orient on Ledgerly, plan and build a customer email update, change the model, fix a failing test, add a project rule and skill, start the app and MCP server, query the book, approvals and steering, then generate a Canvas of the track.",
     workflowSlugs: [] as const,
   },
   {
@@ -88,10 +88,18 @@ export const DECK_BEATS_101 = [
     example: "/create-skill Break down a plan into individual tickets in backlog.",
   },
   {
+    id: "mcp-ledgerly-db",
+    title: "MCP server",
+    detail:
+      "Enable ledgerly-db in Cursor. Go to Settings → MCP, then open `.cursor/mcp.json`. Start the application and the MCP server, confirm it is connected, then query the live SQLite book. Read-only — do not edit files.",
+    example:
+      "Start up the application and MCP server.\n\nUsing the ledgerly-db MCP, list overdue invoices and fetch dispute dsp_1043. Report totals in dollars and cite which MCP tools you called. Do not edit any files.",
+  },
+  {
     id: "allowlist",
     title: "Allowlist",
     detail:
-      "Go to Settings → Agent → Execution & Approvals and change to Allowlist. Paste the prompt; Cursor should ask to allow Run before shutting the app down.",
+      "Paste the prompt. Cursor should ask to allow Run before shutting the app down.",
     example: "Force shutdown the application servers",
   },
   {
@@ -106,6 +114,13 @@ export const DECK_BEATS_101 = [
     detail:
       'Submit the prompt, then edit inline to: "Start the application on its original port and open the invoices view".',
     example: "Start the application on its original port",
+  },
+  {
+    id: "canvas",
+    title: "Canvas",
+    detail:
+      "Use Canvas to generate interactive artifacts that render next to the chat.",
+    example: "Create a canvas repeating the 101 workflow we took today.",
   },
 ] as const;
 

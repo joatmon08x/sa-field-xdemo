@@ -9,7 +9,7 @@ The workflows are not interchangeable. Pick on the shape of the work: how many p
 
 ## Pick a track
 
-- **101** — Ask → Plan → Agent, then `/model`, `/debug`, `/create-rule`, and `/create-skill` (customer email update, change model, fix a failing test, add a project rule and skill).
+- **101** — Ask → Plan → Agent, then `/model`, `/debug`, `/create-rule`, `/create-skill`, **MCP server**, run control, then **Canvas**.
 - **201** — deck-aligned orientation, customization, models, Cloud Agents, Automations, trust, then `/multitask`, `/loop`, `/autopilot`, or `/orchestrate`.
 - **Advanced** — deeper Ledgerly scenarios. Starts with the Cursor CLI primer, then adds `/goal` for a durable product objective.
 

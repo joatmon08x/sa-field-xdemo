@@ -54,9 +54,11 @@ describe("prompt sync", () => {
       "debug",
       "create-rule",
       "create-skill",
+      "mcp-ledgerly-db",
       "allowlist",
       "stop",
       "interrupt-steer",
+      "canvas",
     ]);
     expect(DECK_BEATS_101[0]?.example).toBe("/ask Tell me what Ledgerly does in 3 sentences");
     expect(DECK_BEATS_101[1]?.example).toBe("/plan I want a new feature to update the customer email");
@@ -69,11 +71,25 @@ describe("prompt sync", () => {
     expect(DECK_BEATS_101[6]?.example).toBe(
       "/create-skill Break down a plan into individual tickets in backlog.",
     );
-    expect(DECK_BEATS_101[7]?.example).toBe("Force shutdown the application servers");
-    expect(DECK_BEATS_101[7]?.detail).toContain("Allowlist");
-    expect(DECK_BEATS_101[8]?.example).toBe("Start the application on port 48080.");
-    expect(DECK_BEATS_101[9]?.example).toBe("Start the application on its original port");
-    expect(DECK_BEATS_101[9]?.detail).toContain("open the invoices view");
+    expect(DECK_BEATS_101[7]?.title).toBe("MCP server");
+    expect(DECK_BEATS_101[7]?.detail).toContain(
+      "Enable/reload ledgerly-db in Cursor Settings → MCP.",
+    );
+    expect(DECK_BEATS_101[7]?.example).toContain("Start up the application and MCP server.");
+    expect(DECK_BEATS_101[7]?.example).toContain("ledgerly-db MCP");
+    expect(DECK_BEATS_101[7]?.example).toContain("dsp_1043");
+    expect(DECK_BEATS_101[8]?.example).toBe("Force shutdown the application servers");
+    expect(DECK_BEATS_101[8]?.detail).toContain("ask to allow Run");
+    expect(DECK_BEATS_101[9]?.example).toBe("Start the application on port 48080.");
+    expect(DECK_BEATS_101[10]?.example).toBe("Start the application on its original port");
+    expect(DECK_BEATS_101[10]?.detail).toContain("open the invoices view");
+    expect(DECK_BEATS_101[11]?.title).toBe("Canvas");
+    expect(DECK_BEATS_101[11]?.detail).toContain(
+      "Use Canvas to generate interactive artifacts that render next to the chat.",
+    );
+    expect(DECK_BEATS_101[11]?.example).toBe(
+      "Create a canvas repeating the 101 workflow we took today.",
+    );
 
     const loop = WORKFLOWS.find((workflow) => workflow.slug === "loop");
 
