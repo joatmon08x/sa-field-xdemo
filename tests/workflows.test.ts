@@ -73,7 +73,7 @@ describe("prompt sync", () => {
     );
     expect(DECK_BEATS_101[7]?.title).toBe("MCP server");
     expect(DECK_BEATS_101[7]?.detail).toContain(
-      "Enable/reload ledgerly-db in Cursor Settings → MCP.",
+      "Enable ledgerly-db in Cursor. Go to Settings → MCP, then open `.cursor/mcp.json`.",
     );
     expect(DECK_BEATS_101[7]?.example).toContain("Start up the application and MCP server.");
     expect(DECK_BEATS_101[7]?.example).toContain("ledgerly-db MCP");
