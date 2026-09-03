@@ -3,7 +3,7 @@
  * Prompts are the source of truth — the README test requires them verbatim.
  */
 
-export type DemoTrack = "201" | "advanced";
+export type DemoTrack = "101" | "201" | "advanced";
 
 export type WorkflowMeta = {
   slug: "multitask" | "loop" | "autopilot" | "goal" | "orchestrate";
@@ -20,6 +20,13 @@ export type WorkflowMeta = {
 
 export const DEMO_TRACKS = [
   {
+    id: "101" as const,
+    title: "101",
+    description:
+      "Ask → Plan → Agent, then /model, /debug, /create-rule, and /create-skill: orient on Ledgerly, plan and build a customer email update, change the model, fix a failing test, and add a project rule and skill.",
+    workflowSlugs: [] as const,
+  },
+  {
     id: "201" as const,
     title: "201",
     description:
@@ -35,82 +42,70 @@ export const DEMO_TRACKS = [
   },
 ] as const;
 
-export const DECK_BEATS = [
+export const DECK_BEATS_101 = [
   {
-    id: "orient",
-    title: "Getting oriented",
-    detail: "Ask traces prices, overdue invoices, and the intentionally unfinished dispute path.",
-    example:
-      "What are Ledgerly's only plan prices, and which seeded invoices are overdue? Cite lib/plans.ts, prisma/seed.ts, and prisma/extra-accounts.ts.\n\nExplain the dispute flow end to end. What is intentionally unfinished? Cite the resolve helper, the resolve API route, and the dispute page. Do not edit any files.",
+    id: "ask",
+    title: "Ask",
+    detail: "Read-only orientation before planning.",
+    example: "/ask Tell me what Ledgerly does in 3 sentences",
   },
   {
-    id: "customize",
-    title: "Rules, skills, subagents",
-    detail: "Open the Ledgerly rule, choose-cursor-workflow skill, and one focused worker.",
-    example:
-      "Open .cursor/rules/ledgerly.mdc, .cursor/skills/choose-cursor-workflow/SKILL.md, and .cursor/agents/api-instrumenter.md. Explain how rules, skills, and subagents differ in this repo. Do not edit them.",
+    id: "plan",
+    title: "Plan",
+    detail: "Switch to Plan mode and scope the customer email feature.",
+    example: "/plan I want a new feature to update the customer email",
   },
   {
-    id: "models",
-    title: "Model selection",
+    id: "agent-build",
+    title: "Agent mode to build",
+    detail: "Switch to Agent mode and implement the plan. Review the diff before accepting.",
+  },
+  {
+    id: "model",
+    title: "Model",
+    detail: "Change the model for the next pass.",
+    example: "/model",
+  },
+  {
+    id: "debug",
+    title: "Debug",
+    detail: "Fix a bug with Debug mode on the failing test.",
+    example: "/debug the failing test",
+  },
+  {
+    id: "create-rule",
+    title: "Create a rule",
     detail:
-      "Open a new Agent chat so the picker is visible. Point at Auto if listed (Cursor Router). Pin a high-reasoning parent and faster workers when roles are known; use Auto when the next request is not.",
+      "Use /create-rule to add a project guardrail, then open `.cursor/rules` to review what was written.",
     example:
-      "Look at the models available in this Cursor session (the chat picker, and cursor.com/docs/models or cursor.com/docs/cursor-router if you need current labels). Then recommend a concrete split for Ledgerly /multitask:\n\n1. Parent — one current high-reasoning / thinking model from the picker. It has to decompose four API surfaces, write a dispatch that names files + helper + constraints, and launch ledgerly-reviewer after the diffs.\n2. Each api-instrumenter worker — one current faster focused model from the picker. One named route, a small helper under lib/, no catalog, seed, or dispute-credit test edits.\n3. Auto / Cursor Router — if Auto is in the picker, name the Optimize For mode you would use (Cost, Balance, or Intelligence) for day-to-day vs this /multitask parent, and why. Router classifies each request and sends simple work to efficient models and harder work to more capable ones. If Auto or Router is missing, say so (Teams/Enterprise; Enterprise admins may have it off) and stay with named models.\n\nName the exact picker labels you would select today and why each fits. If a label is missing on this account, say so and pick the next best available option. Do not invent a model. Do not write model slugs into the repo — this is a picker recommendation only. Say where to set them: the parent chat picker, and the model on each Task / api-instrumenter launch (or inherit if the worker should match the parent).",
+      "/create-rule Customer emails should be redacted in the UI. Show the first two letters and domain in plaintext, redact the other letters.",
   },
   {
-    id: "cloud",
-    title: "Cloud Agents",
+    id: "create-skill",
+    title: "Create a project skill",
     detail:
-      "Draft the Cloud Agent brief. Do not launch unless you confirm the environment is ready.",
-    example:
-      "Use the hand-to-cloud-agent skill. Explain how to hand this Ledgerly repo to a Cloud Agent. Cite .cursor/environment.json (install, seed, port 43173). Draft the exact objective you would send: /autopilot if there is an open PR, otherwise a bounded /goal or /orchestrate that finishes dsp_1043 with suggested credit at or below $249 and npm test green. Do not launch a Cloud Agent unless I confirm the environment is ready. Do not invent a fourth price.",
+      "Use /create-skill to add a project skill, then open `.cursor/skills` to review what was written.",
+    example: "/create-skill Break down a plan into individual tickets in backlog.",
   },
   {
-    id: "automations",
-    title: "Automations",
+    id: "allowlist",
+    title: "Allowlist",
     detail:
-      "Open the Automations editor with /automate. Draft only — do not save or enable. Not a local loop.",
-    example:
-      "/automate Create a PR-triggered Cursor Automation that reviews Ledgerly guardrails and leaves an evidence-backed comment. Review only; do not modify code, tests, seed, or CI. Use the automate skill. Draft only — do not save or enable the automation. Do not add a GitHub Actions file. If the Automations editor is not available, say so and stop.",
+      "Go to Settings → Agent → Execution & Approvals and change to Allowlist. Paste the prompt; Cursor should ask to allow Run before shutting the app down.",
+    example: "Force shutdown the application servers",
   },
   {
-    id: "trust",
-    title: "Trust and verification",
-    detail:
-      "Run the shipped suite. One failed test on a clean tree is expected. Do not fix the planted credit cap.",
-    example:
-      "Run npm test and report which tests passed and which failed. Do not edit any files.\n\nOn a clean tree, npm test is 1 failed / 9 passed. The red test is the planted credit cap. Do not change lib/dispute-credit.ts, tests/dispute-credit.test.ts, or the seed.",
-  },
-] as const;
-
-/** Advanced-only Cursor CLI primer. Run these in a terminal at the repo root. */
-export const CLI_BEATS = [
-  {
-    id: "cli-setup",
-    title: "Check the CLI",
-    detail:
-      "Cursor CLI is the same agent in the terminal. Confirm it is installed and signed in before the Ask pass. First run in a new clone needs --trust. The app does not need to be running.",
-    label: "Run in the terminal",
-    example: "agent --version\nagent status",
+    id: "stop",
+    title: "Stop",
+    detail: "Paste the prompt so the agent starts a long-running command, then stop the command.",
+    example: "Start the application on port 48080.",
   },
   {
-    id: "cli-ask",
-    title: "Ask mode",
+    id: "interrupt-steer",
+    title: "Interrupt and steer",
     detail:
-      "Ask is read-only. --trust is required until this directory is trusted; it is not --force. This pass explains why dsp_1043 suggests $400 on a $249 Scale invoice. Nothing should change.",
-    label: "Run in the terminal",
-    example:
-      'agent --trust --mode=ask "Explain why dsp_1043 shows a $400 suggested credit on a $249 invoice. Cite the source files and do not edit anything."',
-  },
-  {
-    id: "cli-session",
-    title: "While the session is open",
-    detail:
-      "/model makes model choice explicit. Then ask which files would change to cap the credit — do not edit them. Ctrl-C leaves the session. Reserve --force; use agent -p only for scripts.",
-    label: "Paste in the CLI session",
-    example:
-      "Which files would need to change to cap the credit and finish dispute resolution? Do not edit them.",
+      'Submit the prompt, then edit inline to: "Start the application on its original port and open the invoices view".',
+    example: "Start the application on its original port",
   },
 ] as const;
 
@@ -240,7 +235,12 @@ export const PROJECT_SKILLS = [
   {
     name: "choose-cursor-workflow",
     path: ".cursor/skills/choose-cursor-workflow/SKILL.md",
-    when: "Pick the 201 or Advanced track, then choose the command from the shape of the work.",
+    when: "Pick the 101, 201, or Advanced track, then choose the command from the shape of the work.",
+  },
+  {
+    name: "break-down-plan-to-tickets",
+    path: ".cursor/skills/break-down-plan-to-tickets/SKILL.md",
+    when: "Turn a plan into individual backlog tickets with acceptance criteria.",
   },
   {
     name: "dispatch-subagents",

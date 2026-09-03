@@ -38,7 +38,7 @@ export default async function WorkflowPage({ params }: { params: Promise<{ slug:
         <span className="text-xs font-medium text-muted-foreground">Tracks:</span>
         {meta.tracks.map((track) => (
           <Badge key={track} variant="secondary">
-            {track === "201" ? "201" : "Advanced"}
+            {track === "101" ? "101" : track === "201" ? "201" : "Advanced"}
           </Badge>
         ))}
       </div>

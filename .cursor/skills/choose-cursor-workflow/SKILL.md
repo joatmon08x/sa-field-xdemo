@@ -1,6 +1,6 @@
 ---
 name: choose-cursor-workflow
-description: Picks the 201 or Advanced Ledgerly track, then chooses /multitask, /loop, /autopilot, /goal, or /orchestrate from the shape of the work.
+description: Picks the 101, 201, or Advanced Ledgerly track, then chooses /multitask, /loop, /autopilot, /goal, or /orchestrate from the shape of the work.
 ---
 
 # Choose a demo track and workflow
@@ -9,6 +9,7 @@ The workflows are not interchangeable. Pick on the shape of the work: how many p
 
 ## Pick a track
 
+- **101** — Ask → Plan → Agent, then `/model`, `/debug`, `/create-rule`, and `/create-skill` (customer email update, change model, fix a failing test, add a project rule and skill).
 - **201** — deck-aligned orientation, customization, models, Cloud Agents, Automations, trust, then `/multitask`, `/loop`, `/autopilot`, or `/orchestrate`.
 - **Advanced** — deeper Ledgerly scenarios. Starts with the Cursor CLI primer, then adds `/goal` for a durable product objective.
 
