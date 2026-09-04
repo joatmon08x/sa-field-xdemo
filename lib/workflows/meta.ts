@@ -88,14 +88,6 @@ export const DECK_BEATS_101 = [
     example: "/create-skill Break down a plan into individual tickets in backlog.",
   },
   {
-    id: "mcp-ledgerly-db",
-    title: "MCP server",
-    detail:
-      "Enable ledgerly-db in Cursor. Go to Settings → MCP, then open `.cursor/mcp.json`. Start the application and the MCP server, confirm it is connected, then query the live SQLite book. Read-only — do not edit files.",
-    example:
-      "Start up the application and MCP server.\n\nUsing the ledgerly-db MCP, list overdue invoices and fetch dispute dsp_1043. Report totals in dollars and cite which MCP tools you called. Do not edit any files.",
-  },
-  {
     id: "allowlist",
     title: "Allowlist",
     detail:
@@ -105,7 +97,7 @@ export const DECK_BEATS_101 = [
   {
     id: "stop",
     title: "Stop",
-    detail: "Paste the prompt so the agent starts a long-running command, then stop the command.",
+    detail: "Go to Settings -> Agent -> Execution & Approvals and change to Allowlist. Paste the prompt so the agent starts a long-running command, then stop the command.",
     example: "Start the application on port 48080.",
   },
   {
@@ -114,6 +106,14 @@ export const DECK_BEATS_101 = [
     detail:
       'Submit the prompt, then edit inline to: "Start the application on its original port and open the invoices view".',
     example: "Start the application on its original port",
+  },
+  {
+    id: "mcp-ledgerly-db",
+    title: "MCP server",
+    detail:
+      "Enable ledgerly-db in Cursor. Go to Customize → MCP -> ledgerly-db. Open `.cursor/mcp.json`. Start the application and the MCP server, confirm it is connected, then query the live SQLite book.",
+    example:
+      "Using the ledgerly-db MCP, list overdue invoices and fetch dispute dsp_1043. Report totals in dollars and cite which MCP tools you called. Do not edit any files.",
   },
   {
     id: "canvas",
