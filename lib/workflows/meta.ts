@@ -29,7 +29,7 @@ export const DECK_BEATS_101 = [
     id: "plan",
     title: "Plan",
     detail: "Switch to Plan mode and scope the customer email feature.",
-    example: "/plan I want a new feature to update the customer email",
+    example: "/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
   },
   {
     id: "agent-build",
@@ -44,40 +44,44 @@ export const DECK_BEATS_101 = [
     example: "/debug the failing test",
   },
   {
-    id: "plan-fix",
-    title: "Plan the fix",
-    detail: "Shift-tab to toggle between modes. Return to Plan mode and draft a plan to fix the bug.",
-    example: "/plan draft a plan to fix the bug",
-  },
-  {
     id: "model-fast",
     title: "Change to a fast model",
     detail: "Change to a faster model for a bug fix.",
-    example: "/model build the fix",
+    example: "/model",
   },
   {
-    id: "model-intelligent",
+    id: "fix",
+    title: "Fix the bug",
+    detail: "Fix the bug with a faster model.",
+    example: "Fix the bug.",
+  },
+  {
+    id: "model-deep",
     title: "Change to a deep model",
-    detail: "Change to a deeper model to plan a more complex feature.",
-    example: "/model /plan Redact the customer email in the UI. The first two characters and domain are plaintext.",
+    detail: "Change to a deeper model for a more complex feature.",
+    example: "/model",
+  },
+  {
+    id: "start-and-stop",
+    title: "Start and stop",
+    detail: "Start planning a new feature and stop it.",
+    example: "Redact the customer email in the UI. The first two characters and domain are plaintext.",
   },
   {
     id: "stop",
     title: "Stop",
     detail: "Stop the plan.",
-    example: "Ask me questions if you are uncertain. Start the plan again.",
   },
   {
     id: "interrupt-steer",
     title: "Interrupt and steer",
-    detail: "Submit the prompt, then edit inline and re-submit.",
-    example: "/plan Redact the customer email in the UI. Show it in plaintext if I click an icon.",
+    detail: "Start planning a new feature, then edit inline and re-submit.",
+    example: "Redact the customer email in the UI. Show it in plaintext if I click an icon. Stop every time you change a file for me to review.",
   },
   {
     id: "diffs",
     title: "Build and review diffs",
     detail: "Review the changes from the agent's last turn under Changes.",
-    example: "Go build it, I’m going to do something else. Let me know when you have a working feature.",
   },
   {
     id: "rule",
@@ -88,11 +92,27 @@ export const DECK_BEATS_101 = [
       "/create-rule New features should use the new API instead of the legacy API.",
   },
   {
+    id: "test-rule",
+    title: "Test the project rule",
+    detail:
+      "Run a prompt to check the rule is applied.",
+    example:
+      "Add a new feature to show the current cap for dispute credit. Make clear which API you’re referencing.",
+  },
+  {
     id: "skill",
     title: "Create a project skill",
     detail:
       "Use /create-skill to add a project skill, which defines how the agent must do something. Review the rule in Customize -> Skills.",
-    example: "/create-skill Use domain-driven design to break down the domains in this application and match it to available APIs or data schemas.",
+    example: "/create-skill Use domain-driven design to break down the domains in this application and match it to available APIs or data schemas. Name it ddd.",
+  },
+  {
+    id: "test-skill",
+    title: "Test the project skill",
+    detail:
+      "Run a prompt to use the skill.",
+    example:
+      "Use domain-driven design on this application. Do not edit files.",
   },
   {
     id: "canvas",
@@ -105,9 +125,9 @@ export const DECK_BEATS_101 = [
     id: "mcp",
     title: "MCP server",
     detail:
-      "Enable a slide-generating MCP server in Cursor. Go to Customize → MCP -> Figma / Google Slides.",
+      "Enable a MCP server for slideshow generation in Cursor. Go to Customize → MCP -> Figma.",
     example:
-      "Create a slideshow in Google Slides based on the Canvas. I want to use this as part of my demo showcase. Do not edit any files.",
+      "Create three slides in Figma Slides outlining how I used Cursor to develop a new feature. I want to use this as part of my demo showcase.",
   },
 ] as const;
 
