@@ -46,8 +46,8 @@ export const DECK_BEATS_101 = [
   {
     id: "ask",
     title: "Ask",
-    detail: "Read-only orientation before planning.",
-    example: "/ask Tell me what Ledgerly does in 3 sentences",
+    detail: "Read-only orientation before planning. Learn about the application.",
+    example: "/ask Tell me what this application does in 3 sentences",
   },
   {
     id: "plan",
@@ -57,14 +57,9 @@ export const DECK_BEATS_101 = [
   },
   {
     id: "agent-build",
-    title: "Agent mode to build",
+    title: "Build in Agent mode",
     detail: "Switch to Agent mode and implement the plan. Review the diff before accepting.",
-  },
-  {
-    id: "model",
-    title: "Model",
-    detail: "Change the model for the next pass.",
-    example: "/model",
+    example: "Build the plan locally.",
   },
   {
     id: "debug",
@@ -73,54 +68,71 @@ export const DECK_BEATS_101 = [
     example: "/debug the failing test",
   },
   {
-    id: "create-rule",
-    title: "Create a rule",
-    detail:
-      "Use /create-rule to add a project guardrail, then open `.cursor/rules` to review what was written.",
-    example:
-      "/create-rule Customer emails should be redacted in the UI. Show the first two letters and domain in plaintext, redact the other letters.",
+    id: "plan-fix",
+    title: "Plan the fix",
+    detail: "Shift-tab to toggle between modes. Return to Plan mode and draft a plan to fix the bug.",
+    example: "/plan draft a plan to fix the bug",
   },
   {
-    id: "create-skill",
-    title: "Create a project skill",
-    detail:
-      "Use /create-skill to add a project skill, then open `.cursor/skills` to review what was written.",
-    example: "/create-skill Break down a plan into individual tickets in backlog.",
+    id: "model-fast",
+    title: "Change to a fast model",
+    detail: "Change to a faster model for a bug fix.",
+    example: "/model build the fix",
   },
   {
-    id: "allowlist",
-    title: "Allowlist",
-    detail:
-      "Paste the prompt. Cursor should ask to allow Run before shutting the app down.",
-    example: "Force shutdown the application servers",
+    id: "model-intelligent",
+    title: "Change to a deep model",
+    detail: "Change to a deeper model to plan a more complex feature.",
+    example: "/model /plan Redact the customer email in the UI. The first two characters and domain are plaintext.",
   },
   {
     id: "stop",
     title: "Stop",
-    detail: "Go to Settings -> Agent -> Execution & Approvals and change to Allowlist. Paste the prompt so the agent starts a long-running command, then stop the command.",
-    example: "Start the application on port 48080.",
+    detail: "Stop the plan.",
+    example: "Ask me questions if you are uncertain. Start the plan again.",
   },
   {
     id: "interrupt-steer",
     title: "Interrupt and steer",
     detail:
-      'Submit the prompt, then edit inline to: "Start the application on its original port and open the invoices view".',
-    example: "Start the application on its original port",
+      'Submit the prompt, then edit inline to: " /plan Redact the customer email in the UI. Show it in plaintext if I click an icon.".',
+    example: "/plan Redact the customer email in the UI. Show it in plaintext if I click an icon.",
   },
   {
-    id: "mcp-ledgerly-db",
-    title: "MCP server",
+    id: "diffs",
+    title: "Build and review diffs",
+    detail: "Review the changes from the agent's last turn under Changes.",
+    example: "Go build it, I’m going to do something else. Let me know when you have a working feature.",
+  },
+  {
+    id: "rule",
+    title: "Create a project rule",
     detail:
-      "Enable ledgerly-db in Cursor. Go to Customize → MCP -> ledgerly-db. Open `.cursor/mcp.json`. Start the application and the MCP server, confirm it is connected, then query the live SQLite book.",
+      "Use /create-rule to add a project rule, which defines what the agent must do. Review the rule in Customize -> Rules.",
     example:
-      "Using the ledgerly-db MCP, list overdue invoices and fetch dispute dsp_1043. Report totals in dollars and cite which MCP tools you called. Do not edit any files.",
+      "/create-rule New features should use the new API instead of the legacy API.",
+  },
+  {
+    id: "skill",
+    title: "Create a project skill",
+    detail:
+      "Use /create-skill to add a project skill, which defines how the agent must do something. Review the rule in Customize -> Skills.",
+    example: "/create-skill Use domain-driven design to break down the domains in this application and match it to available APIs or data schemas.",
   },
   {
     id: "canvas",
     title: "Canvas",
     detail:
       "Use Canvas to generate interactive artifacts that render next to the chat.",
-    example: "Create a canvas repeating the 101 workflow we took today.",
+    example: "Create a canvas explaining what we did today.",
+  },
+  {
+    id: "mcp",
+    title: "MCP server",
+    detail:
+      "Enable a slide-generating MCP server in Cursor. Go to Customize → MCP -> Figma / Google Slides.",
+    example:
+      "Create a slideshow in Google Slides based on the Canvas. I want to use this as part of my demo showcase. Do not edit any files.",
   },
 ] as const;
 
