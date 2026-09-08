@@ -9,7 +9,7 @@ The workflows are not interchangeable. Pick on the shape of the work: how many p
 
 ## Pick a track
 
-- **101** — Ask → Plan → Agent, then `/model`, `/debug`, `/create-rule`, `/create-skill`, **MCP server**, run control, then **Canvas**.
+- **101** — You will explore different ways to work in Cursor, use modes and models for the right tasks, apply rules and skills to ensure consistent quality, and complete at least one task with an agent.
 - **201** — orient, repair the planted v1 client, create the v2-only rule live, then cover customization, models, Cloud Agents, Automations, trust, and one of `/multitask`, `/loop`, `/autopilot`, or `/orchestrate`.
 - **Advanced** — deeper Ledgerly scenarios. Starts with the Cursor CLI primer, then adds `/goal` for a durable product objective.
 

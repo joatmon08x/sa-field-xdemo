@@ -18,30 +18,6 @@ export type WorkflowMeta = {
   prompt: string;
 };
 
-export const DEMO_TRACKS = [
-  {
-    id: "101" as const,
-    title: "101",
-    description:
-      "Ask → Plan → Agent, then /model, /debug, /create-rule, /create-skill, MCP server, run control, and Canvas: orient on Ledgerly, plan and build a customer email update, change the model, fix a failing test, add a project rule and skill, start the app and MCP server, query the book, approvals and steering, then generate a Canvas of the track.",
-    workflowSlugs: [] as const,
-  },
-  {
-    id: "201" as const,
-    title: "201",
-    description:
-      "Deck-aligned: orient, repair the planted v1 client selection, create the v2-only rule live, customize the agent, choose models, show Cloud Agents and Automations, then breadth, time, PR ownership, planning, and verification.",
-    workflowSlugs: ["multitask", "loop", "autopilot", "orchestrate"] as const,
-  },
-  {
-    id: "advanced" as const,
-    title: "Advanced",
-    description:
-      "Deeper Ledgerly scenarios: Cursor CLI primer, durable goals, parallel workers, scheduled checking, PR supervision, planner trees, and verifier evidence.",
-    workflowSlugs: ["goal", "multitask", "loop", "autopilot", "orchestrate"] as const,
-  },
-] as const;
-
 export const DECK_BEATS_101 = [
   {
     id: "ask",
@@ -94,8 +70,7 @@ export const DECK_BEATS_101 = [
   {
     id: "interrupt-steer",
     title: "Interrupt and steer",
-    detail:
-      'Submit the prompt, then edit inline and re-submit.',
+    detail: "Submit the prompt, then edit inline and re-submit.",
     example: "/plan Redact the customer email in the UI. Show it in plaintext if I click an icon.",
   },
   {
@@ -133,6 +108,34 @@ export const DECK_BEATS_101 = [
       "Enable a slide-generating MCP server in Cursor. Go to Customize → MCP -> Figma / Google Slides.",
     example:
       "Create a slideshow in Google Slides based on the Canvas. I want to use this as part of my demo showcase. Do not edit any files.",
+  },
+] as const;
+
+export function deckBeats101Sequence(): string {
+  return DECK_BEATS_101.map((beat) => beat.title).join(" → ");
+}
+
+export const DEMO_TRACKS = [
+  {
+    id: "101" as const,
+    title: "101",
+    description:
+      "You will explore different ways to work in Cursor, use modes and models for the right tasks, apply rules and skills to ensure consistent quality, and complete at least one task with an agent.",
+    workflowSlugs: [] as const,
+  },
+  {
+    id: "201" as const,
+    title: "201",
+    description:
+      "Deck-aligned: orient, repair the planted v1 client selection, create the v2-only rule live, customize the agent, choose models, show Cloud Agents and Automations, then breadth, time, PR ownership, planning, and verification.",
+    workflowSlugs: ["multitask", "loop", "autopilot", "orchestrate"] as const,
+  },
+  {
+    id: "advanced" as const,
+    title: "Advanced",
+    description:
+      "Deeper Ledgerly scenarios: Cursor CLI primer, durable goals, parallel workers, scheduled checking, PR supervision, planner trees, and verifier evidence.",
+    workflowSlugs: ["goal", "multitask", "loop", "autopilot", "orchestrate"] as const,
   },
 ] as const;
 

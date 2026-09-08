@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { DECK_BEATS_101, DEMO_TRACKS, WORKFLOWS } from "@/lib/workflows/meta";
+import { DECK_BEATS_101, DEMO_TRACKS, WORKFLOWS, deckBeats101Sequence } from "@/lib/workflows/meta";
 
 const root = process.cwd();
 
@@ -27,6 +27,9 @@ describe("prompt sync", () => {
     const advanced = DEMO_TRACKS.find((track) => track.id === "advanced");
 
     expect(track101?.workflowSlugs).toEqual([]);
+    expect(track101?.description).toBe(
+      "You will explore different ways to work in Cursor, use modes and models for the right tasks, apply rules and skills to ensure consistent quality, and complete at least one task with an agent.",
+    );
     expect(track201?.workflowSlugs).toEqual(["multitask", "loop", "autopilot", "orchestrate"]);
     expect(advanced?.workflowSlugs).toContain("goal");
     expect(track101?.workflowSlugs).not.toContain("goal");
@@ -45,6 +48,19 @@ describe("prompt sync", () => {
     expect(autopilot?.prompt.startsWith("/autopilot")).toBe(true);
     expect(autopilot?.prompt).not.toContain("/goal");
     expect(autopilot?.blurb).toContain("/babysit");
+
+    const skill = readFileSync(
+      join(root, ".cursor/skills/choose-cursor-workflow/SKILL.md"),
+      "utf8",
+    );
+    expect(skill).toContain(track101?.description ?? "");
+    expect(deckBeats101Sequence()).toBe(
+      "Ask → Plan → Build in Agent mode → Debug → Plan the fix → Change to a fast model → Change to a deep model → Stop → Interrupt and steer → Build and review diffs → Create a project rule → Create a project skill → Canvas → MCP server",
+    );
+
+    for (const beat of DECK_BEATS_101) {
+      expect(beat.example, `${beat.id} is missing an example prompt`).toBeTruthy();
+    }
 
     expect(DECK_BEATS_101.map((beat) => beat.id)).toEqual([
       "ask",
