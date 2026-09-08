@@ -95,7 +95,7 @@ export const DECK_BEATS_101 = [
     id: "interrupt-steer",
     title: "Interrupt and steer",
     detail:
-      'Submit the prompt, then edit inline to: " /plan Redact the customer email in the UI. Show it in plaintext if I click an icon.".',
+      'Submit the prompt, then edit inline and re-submit.',
     example: "/plan Redact the customer email in the UI. Show it in plaintext if I click an icon.",
   },
   {

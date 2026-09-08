@@ -50,53 +50,49 @@ describe("prompt sync", () => {
       "ask",
       "plan",
       "agent-build",
-      "model",
       "debug",
-      "create-rule",
-      "create-skill",
-      "allowlist",
+      "plan-fix",
+      "model-fast",
+      "model-intelligent",
       "stop",
       "interrupt-steer",
-      "mcp-ledgerly-db",
+      "diffs",
+      "rule",
+      "skill",
       "canvas",
+      "mcp",
     ]);
 
     const beat = (id: (typeof DECK_BEATS_101)[number]["id"]) =>
       DECK_BEATS_101.find((entry) => entry.id === id);
-    const example = (id: (typeof DECK_BEATS_101)[number]["id"]) => {
-      const entry = beat(id);
-      return entry && "example" in entry ? entry.example : undefined;
-    };
 
-    expect(example("ask")).toBe("/ask Tell me what Ledgerly does in 3 sentences");
-    expect(example("plan")).toBe("/plan I want a new feature to update the customer email");
-    expect("example" in beat("agent-build")!).toBe(false);
-    expect(example("model")).toBe("/model");
-    expect(example("debug")).toBe("/debug the failing test");
-    expect(example("create-rule")).toBe(
-      "/create-rule Customer emails should be redacted in the UI. Show the first two letters and domain in plaintext, redact the other letters.",
+    expect(beat("ask")?.example).toBe("/ask Tell me what this application does in 3 sentences");
+    expect(beat("plan")?.example).toBe("/plan I want a new feature to update the customer email");
+    expect(beat("agent-build")?.example).toBe("Build the plan locally.");
+    expect(beat("debug")?.example).toBe("/debug the failing test");
+    expect(beat("plan-fix")?.example).toBe("/plan draft a plan to fix the bug");
+    expect(beat("model-fast")?.example).toBe("/model build the fix");
+    expect(beat("model-intelligent")?.example).toBe(
+      "/model /plan Redact the customer email in the UI. The first two characters and domain are plaintext.",
     );
-    expect(example("create-skill")).toBe(
-      "/create-skill Break down a plan into individual tickets in backlog.",
+    expect(beat("stop")?.example).toBe("Ask me questions if you are uncertain. Start the plan again.");
+    expect(beat("interrupt-steer")?.example).toBe(
+      "/plan Redact the customer email in the UI. Show it in plaintext if I click an icon.",
     );
-    expect(example("allowlist")).toBe("Force shutdown the application servers");
-    expect(beat("allowlist")?.detail).toContain("ask to allow Run");
-    expect(example("stop")).toBe("Start the application on port 48080.");
-    expect(beat("stop")?.detail).toContain("Allowlist");
-    expect(example("interrupt-steer")).toBe("Start the application on its original port");
-    expect(beat("interrupt-steer")?.detail).toContain("open the invoices view");
-    expect(beat("mcp-ledgerly-db")?.title).toBe("MCP server");
-    expect(beat("mcp-ledgerly-db")?.detail).toContain("Customize → MCP");
-    expect(beat("mcp-ledgerly-db")?.detail).toContain(".cursor/mcp.json");
-    expect(example("mcp-ledgerly-db")).toContain("ledgerly-db MCP");
-    expect(example("mcp-ledgerly-db")).toContain("dsp_1043");
+    expect(beat("diffs")?.example).toBe(
+      "Go build it, I’m going to do something else. Let me know when you have a working feature.",
+    );
+    expect(beat("rule")?.example).toBe(
+      "/create-rule New features should use the new API instead of the legacy API.",
+    );
+    expect(beat("skill")?.example).toBe(
+      "/create-skill Use domain-driven design to break down the domains in this application and match it to available APIs or data schemas.",
+    );
     expect(beat("canvas")?.title).toBe("Canvas");
-    expect(beat("canvas")?.detail).toContain(
-      "Use Canvas to generate interactive artifacts that render next to the chat.",
-    );
-    expect(example("canvas")).toBe(
-      "Create a canvas repeating the 101 workflow we took today.",
-    );
+    expect(beat("canvas")?.example).toBe("Create a canvas explaining what we did today.");
+    expect(beat("mcp")?.title).toBe("MCP server");
+    expect(beat("mcp")?.detail).toContain("Customize → MCP");
+    expect(beat("mcp")?.example).toContain("Google Slides");
 
     const loop = WORKFLOWS.find((workflow) => workflow.slug === "loop");
 
