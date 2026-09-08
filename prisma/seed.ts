@@ -8,7 +8,7 @@ import { EXTRA_ACCOUNTS } from "./extra-accounts";
 const prisma = new PrismaClient();
 
 /** Invoice shape for the extra book accounts: issued Aug 1, due Aug 31 — OPEN
- * on the frozen clock — except three planted states that give the collections
+ * on the frozen clock — except three exception states that give the collections
  * views something to chew on without touching the original demo beats. */
 function extraInvoiceState(index: number) {
   if (index === 2 || index === 8) {
@@ -288,7 +288,7 @@ const INVOICES = [
 const DISPUTES = [
   {
     // The $400 claim is valid input for testing the catalog cap. The deprecated
-    // v1 suggested-credit API intentionally mistakes this claim for the credit.
+    // v1 suggested-credit API returns this claim uncapped.
     id: "dsp_1043",
     invoiceId: "inv_1043",
     status: "NEEDS_REVIEW",

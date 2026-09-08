@@ -1,8 +1,8 @@
 /**
- * INTENTIONAL FAIL — 201 API migration target.
+ * Regression cover for the v2 migration.
  *
- * The app currently selects the deprecated v1 endpoint. Fix the call site to
- * use v2; keep the legacy route available for compatibility.
+ * The client still selects the deprecated v1 endpoint, so this fails until the
+ * call site moves to v2. Keep the legacy route available for compatibility.
  */
 import { describe, expect, it } from "vitest";
 import { suggestedCreditPath } from "@/lib/disputes/suggested-credit-api";

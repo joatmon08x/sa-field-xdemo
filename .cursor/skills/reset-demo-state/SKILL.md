@@ -1,6 +1,6 @@
 ---
 name: reset-demo-state
-description: Put a Ledgerly demo machine back to the shipped state — reseed SQLite, restore the intentional red test, free the port, clear stray edits. Use when a demo just ended, the data looks wrong, tests are unexpectedly green, or the dev server will not start.
+description: Put a Ledgerly demo machine back to the shipped state — reseed SQLite, restore the expected red test, free the port, clear stray edits. Use when a demo just ended, the data looks wrong, tests are unexpectedly green, or the dev server will not start.
 ---
 
 # Reset the demo state

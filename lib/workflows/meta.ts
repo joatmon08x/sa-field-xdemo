@@ -127,7 +127,7 @@ export const DEMO_TRACKS = [
     id: "201" as const,
     title: "201",
     description:
-      "Deck-aligned: orient, repair the planted v1 client selection, create the v2-only rule live, customize the agent, choose models, show Cloud Agents and Automations, then breadth, time, PR ownership, planning, and verification.",
+      "Deck-aligned: orient, migrate the v1 client selection to v2, create the v2-only rule live, customize the agent, choose models, show Cloud Agents and Automations, then breadth, time, PR ownership, planning, and verification.",
     workflowSlugs: ["multitask", "loop", "autopilot", "orchestrate"] as const,
   },
   {
@@ -247,7 +247,7 @@ export const PROJECT_AGENTS = [
   {
     name: "ledgerly-reviewer",
     path: ".cursor/agents/ledgerly-reviewer.md",
-    when: "After any code change. Diff-only review against catalog prices, seed names, and planted seams.",
+    when: "After any code change. Diff-only review against catalog prices, seed names, and protected paths.",
   },
   {
     name: "api-instrumenter",
