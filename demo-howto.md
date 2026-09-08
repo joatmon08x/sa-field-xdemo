@@ -11,17 +11,18 @@ The pastes below match the copy-paste blocks on `/workflows`. Deck and CLI cards
 **Track 1 — 201**
 
 1. Getting oriented — [demo error](#1-the-demo-error-2-min) + [Ask](#2-ask-3-min)
-2. [Customize the Agent](#6-customize-the-agent-3-min) — rules, skills, subagents
-3. [Model selection](#7-model-selection-2-min)
-4. [Cloud Agents](#8-cloud-agents-3-min)
-5. [Automations](#9-automations-3-min)
-6. [Choose one 201 workflow](#10-workflow-step-library) — `/multitask`, `/loop`, `/autopilot`, or `/orchestrate`
-7. [Trust and verification](#11-trust-and-verification-3-min)
+2. [Repair the API client](#4-agent--repair-the-api-client-5-8-min), then create the v2-only rule live
+3. [Customize the Agent](#6-customize-the-agent-3-min) — rules, skills, subagents
+4. [Model selection](#7-model-selection-2-min)
+5. [Cloud Agents](#8-cloud-agents-3-min)
+6. [Automations](#9-automations-3-min)
+7. [Choose one 201 workflow](#10-workflow-step-library) — `/multitask`, `/loop`, `/autopilot`, or `/orchestrate`
+8. [Trust and verification](#11-trust-and-verification-3-min)
 
 **Track 2 — Advanced**
 
 1. [The planted error](#1-the-demo-error-2-min)
-2. Pick one or more local surfaces: [Ask](#2-ask-3-min), [Cmd-K](#3-cmd-k-2-min), [Agent](#4-agent--wire-resolve-5-8-min), [Design Mode](#5-design-mode-3-min)
+2. Pick one or more local surfaces: [Ask](#2-ask-3-min), [Cmd-K](#3-cmd-k-2-min), [Agent](#4-agent--repair-the-api-client-5-8-min), [Design Mode](#5-design-mode-3-min)
 3. [Cursor CLI primer](#advanced-cursor-cli-primer-5-min)
 4. [Choose an advanced workflow](#10-workflow-step-library) — `/goal`, `/multitask`, `/loop`, `/autopilot`, or `/orchestrate`
 5. [Verify](#11-trust-and-verification-3-min) and [reset](#12-close)
@@ -63,14 +64,15 @@ Open **http://localhost:43173**.
 
 Check shipped state:
 
-- `npm test` is **1 failed / 9 passed**
+- `npm test` is **1 failed / 20 passed**; the sole failure is `tests/suggested-credit-api.test.ts`
 - [http://127.0.0.1:43173/disputes/dsp_1043](http://127.0.0.1:43173/disputes/dsp_1043) shows **Suggested credit $400.00** in red, above the Scale price of **$249**
-- Accept credit / Decline are disabled — that unfinished UI is separate from the planted credit-cap error
+- The deprecated v1 route returns the $400 claim; v2, the domain helper, the seed, and the MCP store the correct $249 credit
+- Accept credit / Decline are disabled — that unfinished resolution UI is separate from the planted API-version error
 
-If the credit reads $249.00 or the suite is all green, a prior run capped `lib/dispute-credit.ts`. Restore with the `reset-demo-state` skill, or:
+If the credit reads $249.00 or the suite is all green, a prior run switched the client to v2. Restore with the `reset-demo-state` skill, or:
 
 ```bash
-git checkout -- lib/dispute-credit.ts
+git checkout -- lib/disputes/suggested-credit-api.ts
 npx prisma db seed
 ```
 
@@ -96,20 +98,22 @@ Port 43173 busy: stop the old `npm run dev`. Empty dashboard: `npm run db:reset`
 
 > Ledgerly is a fictional billing app we use for this demo. It contains one known error on purpose.
 >
-> This invoice costs $249, but the dispute claims $400. The app incorrectly copies the $400 claim into the suggested credit instead of capping it at the $249 invoice price. That is why the page shows a red warning and one test is red.
+> This invoice costs $249, but the dispute claims $400. The current v2 API caps the suggested credit at $249. The page still calls deprecated v1, which returns the $400 claim. That is why the page shows a red warning and one test is red.
 >
-> The same error appears in four places: the seed creates the example, the helper contains the faulty calculation, the page shows the result, and the test describes the correct behavior. We will use that connection to show how Cursor understands, changes, and verifies a codebase.
+> The mismatch crosses the API routes, client, page, and test. We will use that connection to show how Cursor diagnoses, changes, and verifies a codebase without deleting compatibility code.
 
 **How the error correlates:**
 
 | Layer | File | What it proves |
 | --- | --- | --- |
 | Demo data | `prisma/seed.ts` | `dsp_1043` claims $400 against `inv_1043`, a $249 Scale invoice |
-| Faulty logic | `lib/dispute-credit.ts` | Returns the claimed amount without applying the catalog cap |
-| Product surface | `app/disputes/[id]/page.tsx` | Recomputes and displays the same $400 suggestion in red |
-| Expected behavior | `tests/dispute-credit.test.ts` | Expects the suggestion to stop at the $249 plan price |
+| Correct domain logic | `lib/dispute-credit.ts` | Caps suggested credit at the catalog plan price |
+| Stored state | `prisma/seed.ts`, `mcp/ledgerly-db/queries.ts` | Records and reports the correct $249 credit even while the live UI shows v1's $400 response |
+| Versioned APIs | `app/api/v1/disputes/[id]/suggested-credit/route.ts`, `app/api/v2/disputes/[id]/suggested-credit/route.ts` | v1 returns the $400 claim for compatibility; v2 returns $249 |
+| Faulty client selection | `lib/disputes/suggested-credit-api.ts` | Selects deprecated v1, so the UI displays $400 |
+| Expected behavior | `tests/suggested-credit-api.test.ts` | Expects the client to select v2 |
 
-**Look for:** Red **Suggested credit $400.00**, copy stating it is above **$249.00**, and disabled Accept / Decline buttons. Those buttons are a separate unfinished seam; do not confuse them with the credit-cap error.
+**Look for:** Red **Suggested credit $400.00**, copy stating it came from v1 and is above **$249.00**, and disabled Accept / Decline buttons. Those buttons are a separate unfinished seam; do not confuse them with the API-version error.
 
 ---
 
@@ -121,7 +125,7 @@ Port 43173 busy: stop the old `npm run dev`. Empty dashboard: `npm run db:reset`
 
 **Say — novice version:**
 
-> I am starting in Ask mode because I want an explanation before any code changes. Cursor can read the repository and cite the files it used, but it cannot edit them in this mode. I will use its answer to connect the red page to the faulty helper and the failing test.
+> I am starting in Ask mode because I want an explanation before any code changes. Cursor can read the repository and cite the files it used, but it cannot edit them in this mode. I will use its answer to connect the red page to the deprecated client selection and the failing test.
 
 **Paste** (same block as the Getting oriented card):
 
@@ -131,11 +135,11 @@ What are Ledgerly's only plan prices, and which seeded invoices are overdue? Cit
 Explain the dispute flow end to end. What is intentionally unfinished? Cite the resolve helper, the resolve API route, and the dispute page. Do not edit any files.
 ```
 
-**Look for:** Citations to `lib/plans.ts`, `prisma/seed.ts`, and `prisma/extra-accounts.ts`; `INV-1043` among the overdue invoices; the resolve stub named separately from the credit-cap error; no edits.
+**Look for:** Citations to `lib/plans.ts`, `prisma/seed.ts`, and `prisma/extra-accounts.ts`; `INV-1043` among the overdue invoices; the resolve stub named separately from the API-version error; no edits.
 
 **Say after it answers:**
 
-> Cursor explained the behavior from source instead of guessing from the screen. The answer identified the seeded invoice and the separate unfinished resolution path. The correlation table above shows the faulty credit helper and its test.
+> Cursor explained the behavior from source instead of guessing from the screen. The answer identified the seeded invoice and the separate unfinished resolution path. The correlation table above shows the deprecated client selection and its test.
 
 ---
 
@@ -159,13 +163,13 @@ In under 15 words, explain that the clock is frozen on 23 August 2026 so overdue
 
 **Say:**
 
-> That TODO is intentional, like the disabled Accept / Decline controls. Both are small editing seams. Neither one is the planted $400 credit-cap error.
+> That TODO is intentional, like the disabled Accept / Decline controls. Both are small editing seams. Neither one is the planted suggested-credit API-version error.
 
 ---
 
-## 4. Agent — wire resolve (5-8 min)
+## 4. Agent — repair the API client (5-8 min)
 
-Skip this step if the advanced command will be `/goal` or `/orchestrate` (same work, longer leash).
+Skip this step if the advanced command will be `/goal` or `/orchestrate` (they include this migration plus the resolution stub).
 
 **Open:** Agent. Keep [dsp_1043](http://127.0.0.1:43173/disputes/dsp_1043) visible.
 
@@ -173,19 +177,27 @@ Skip this step if the advanced command will be `/goal` or `/orchestrate` (same w
 
 **Say:**
 
-> Ask only explained the code. Agent can change it. I am giving Agent three named files and one explicit boundary: wire the unfinished resolution path, but leave the planted credit calculation unchanged for the later `/goal` or `/orchestrate` step.
+> Ask only explained the code. Agent can change it. I am asking it to diagnose the version mismatch and change only the client selection. Both API routes stay available.
 
 **Paste:**
 
 ```text
-Implement the existing dispute-resolution stub end to end: lib/disputes/resolve.ts, the resolve API route, and the Resolution buttons. Persist Accept or Decline with a reviewer note. Do not edit lib/dispute-credit.ts, tests/dispute-credit.test.ts, or prisma/seed.ts.
+Diagnose why dsp_1043 shows a $400 suggested credit even though v2 caps it at $249. Switch lib/disputes/suggested-credit-api.ts from v1 to v2. Preserve both API routes, the $400 dispute claim, and tests/suggested-credit-api.test.ts. Run the relevant tests and verify the page shows $249 from v2.
 ```
 
-**Look for:** Accept / Decline enabled. A reviewer note can persist. Suggested credit may still read **$400** — this prompt does not require editing `lib/dispute-credit.ts`. That cap is the `/goal` / `/orchestrate` finish line.
+**Look for:** One client-version edit. Both v1 and v2 route tests still pass. `tests/suggested-credit-api.test.ts` turns green. The page shows **$249** from v2.
 
 **Say:**
 
-> I review the diff before it is real. The $400 suggestion can stay red until we decide to cap it.
+> I review the diff before it is real. The compatibility route remains; only the client moved.
+
+**Then paste this `/create-rule` prompt:**
+
+```text
+/create-rule Future code must never call /api/v1/disputes/*/suggested-credit. It must use /api/v2/disputes/*/suggested-credit. Create the project rule at .cursor/rules/suggested-credit-api-v2.mdc and show me the file before I keep it.
+```
+
+**Look for:** A proposed project rule under `.cursor/rules/`. This is a live manual beat; do not add the rule to the shipped repository.
 
 ---
 
@@ -257,7 +269,7 @@ Open .cursor/rules/ledgerly.mdc, .cursor/skills/choose-cursor-workflow/SKILL.md,
 Look at the models available in this Cursor session (the chat picker, and cursor.com/docs/models or cursor.com/docs/cursor-router if you need current labels). Then recommend a concrete split for Ledgerly /multitask:
 
 1. Parent — one current high-reasoning / thinking model from the picker. It has to decompose four API surfaces, write a dispatch that names files + helper + constraints, and launch ledgerly-reviewer after the diffs.
-2. Each api-instrumenter worker — one current faster focused model from the picker. One named route, a small helper under lib/, no catalog, seed, or dispute-credit test edits.
+2. Each api-instrumenter worker — one current faster focused model from the picker. One named route, a small helper under lib/, no catalog, seed, suggested-credit client, or intentional test edits.
 3. Auto / Cursor Router — if Auto is in the picker, name the Optimize For mode you would use (Cost, Balance, or Intelligence) for day-to-day vs this /multitask parent, and why. Router classifies each request and sends simple work to efficient models and harder work to more capable ones. If Auto or Router is missing, say so (Teams/Enterprise; Enterprise admins may have it off) and stay with named models.
 
 Name the exact picker labels you would select today and why each fits. If a label is missing on this account, say so and pick the next best available option. Do not invent a model. Do not write model slugs into the repo — this is a picker recommendation only. Say where to set them: the parent chat picker, and the model on each Task / api-instrumenter launch (or inherit if the worker should match the parent).
@@ -282,7 +294,7 @@ Name the exact picker labels you would select today and why each fits. If a labe
 **Paste** (same block as the Cloud Agents card):
 
 ```text
-Use the hand-to-cloud-agent skill. Explain how to hand this Ledgerly repo to a Cloud Agent. Cite .cursor/environment.json (install, seed, port 43173). Draft the exact objective you would send: /autopilot if there is an open PR, otherwise a bounded /goal or /orchestrate that finishes dsp_1043 with suggested credit at or below $249 and npm test green. Do not launch a Cloud Agent unless I confirm the environment is ready. Do not invent a fourth price.
+Use the hand-to-cloud-agent skill. Explain how to hand this Ledgerly repo to a Cloud Agent. Cite .cursor/environment.json (install, seed, port 43173). Draft the exact objective you would send: /autopilot if there is an open PR, otherwise a bounded /goal or /orchestrate that switches the suggested-credit client from v1 to v2, preserves both routes, finishes dispute resolution, and gets npm test green. Do not launch a Cloud Agent unless I confirm the environment is ready. Do not invent a fourth price.
 ```
 
 **Do:** Review the draft. Launch only if you confirm the environment is ready.
@@ -348,17 +360,17 @@ If the CLI is missing, install it before the demo from [cursor.com/docs/cli/inst
 **Run:**
 
 ```bash
-agent --trust --mode=ask "Explain why dsp_1043 shows a $400 suggested credit on a $249 invoice. Cite the source files and do not edit anything."
+agent --trust --mode=ask "Explain why dsp_1043 shows a $400 suggested credit even though the stored credit and v2 response are $249. Cite the source files and do not edit anything."
 ```
 
 While the session is open:
 
 1. Run `/model` and point out that model choice is explicit.
-2. Ask: `Which files would need to change to cap the credit and finish dispute resolution? Do not edit them.`
+2. Ask: `Which file must change to move the client from v1 to v2, and which files remain for dispute resolution? Do not edit them.`
 3. Review the cited files and proposed boundary.
 4. Press Ctrl-C to leave the session.
 
-**Look for:** `prisma/seed.ts` preserves the $400 claim, `lib/dispute-credit.ts` exposes the planted cap seam, and the resolution stub spans the library, API route, and panel. No files change.
+**Look for:** `prisma/seed.ts` preserves the $400 claim, `lib/dispute-credit.ts` caps correctly, `lib/disputes/suggested-credit-api.ts` selects v1, and the resolution stub spans the library, API route, and panel. No files change.
 
 **Land:** Interactive CLI is for a reviewed conversation; `agent -p` is the non-interactive form for scripts. Approval boundaries still matter, so reserve `--force` for deliberate automation rather than the live demo.
 
@@ -456,7 +468,7 @@ The 201 deck calls this `/babysit`. The current supported name is `/autopilot`.
 
 **Say:**
 
-> One objective: make dispute resolution demo-complete. Cap the credit, wire resolve, enable the buttons, keep going until the checks pass. The agent judges the finish line. I review.
+> One objective: make dispute resolution demo-complete. Move the suggested-credit client from v1 to v2, preserve both routes, wire resolve, enable the buttons, and keep going until the checks pass. The agent judges the finish line. I review.
 
 **Short prompt:**
 
@@ -468,7 +480,7 @@ The 201 deck calls this `/babysit`. The current supported name is `/autopilot`.
 
 **Fallback:** If Cursor does not open `lib/workflows/meta.ts`, use **Copy full prompt** on that page.
 
-**Look for:** Suggested credit on dsp_1043 at or below **$249**. `npm test` green. `dispute-verifier` reports evidence. Seed and `tests/dispute-credit.test.ts` untouched.
+**Look for:** Suggested credit on dsp_1043 at **$249** from v2. Both routes remain. `npm test` is green. `dispute-verifier` reports evidence. Seed and `tests/suggested-credit-api.test.ts` are untouched.
 
 If the run must survive closing the laptop, use the `hand-to-cloud-agent` skill.
 
@@ -518,12 +530,12 @@ Need `bun` on PATH and a `CURSOR_API_KEY` (personal key or team service account,
 ```text
 Run npm test and report which tests passed and which failed. Do not edit any files.
 
-On a clean tree, npm test is 1 failed / 9 passed. The red test is the planted credit cap. Do not change lib/dispute-credit.ts, tests/dispute-credit.test.ts, or the seed.
+On a clean tree, npm test is 1 failed / 20 passed. The sole red test is tests/suggested-credit-api.test.ts because the client intentionally selects deprecated v1. Do not change the test, either route, or the seed.
 ```
 
-**If `/goal` or `/orchestrate` completed dispute resolution:** `npm test` should be fully green. Load dsp_1043 and confirm suggested credit is at or below **$249** and Accept / Decline work.
+**If `/goal` or `/orchestrate` completed dispute resolution:** `npm test` should be fully green. Load dsp_1043 and confirm suggested credit is **$249** from v2, both routes remain, and Accept / Decline work.
 
-**If no credit-cap step ran:** `npm test` should remain **1 failed / 9 passed**. That is shipped state, not failed setup. Do not let the agent "fix" the red test.
+**If no client-migration step ran:** `npm test` should remain **1 failed / 20 passed**. That is shipped state, not failed setup. Do not let the agent edit the intentional test.
 
 **Land:** A green check is evidence, not permission to merge. The presenter remains accountable.
 
@@ -535,12 +547,13 @@ On a clean tree, npm test is 1 failed / 9 passed. The red test is the planted cr
 
 **Say:**
 
-> I reviewed the result. Now I am resetting the demo app so the next session starts with the same planted $400 error and the same expected red test.
+> I reviewed the result. Now I am resetting the demo app so the next session starts with the same planted v1 client, the same $400 UI result, and the same expected red test.
 
 **Do:** Ask the agent to run `reset-demo-state`, or:
 
 ```bash
-git checkout -- lib/dispute-credit.ts
+git checkout -- lib/disputes/suggested-credit-api.ts
+rm -f .cursor/rules/suggested-credit-api-v2.mdc
 git checkout -- .
 npx prisma db seed
 npm test
@@ -548,7 +561,7 @@ npm test
 
 Only run `git checkout -- .` if you mean to drop **all** local changes.
 
-**Shipped state again:** suggested credit **$400.00** on dsp_1043, suite **1 failed / 9 passed**.
+**Shipped state again:** suggested credit **$400.00** from v1 on dsp_1043, v2 and stored credit **$249.00**, suite **1 failed / 20 passed**.
 
 ---
 
@@ -556,7 +569,8 @@ Only run `git checkout -- .` if you mean to drop **all** local changes.
 
 - Invent a fourth price, ARR, or a real customer
 - “Correct” the $400 claim on dsp_1043 or the seed
-- Touch `tests/dispute-credit.test.ts` unless the step is the cap
+- Touch `tests/suggested-credit-api.test.ts` to make the migration pass
+- Delete or change either suggested-credit API route
 - Commit a KPI restyle to `main`
 - Run `/loop` in the cloud, or `/orchestrate` without `bun` and a key
 - Launch a Cloud Agent unless you confirm the environment is ready
@@ -567,13 +581,14 @@ Only run `git checkout -- .` if you mean to drop **all** local changes.
 
 ## 201 short path (20–25 min)
 
-1. Demo error + Ask — connect the UI, helper, seed, and test
-2. Open one rule, one skill, one subagent
-3. Explain model choice in the picker
-4. Draft the Cloud Agent brief; open an Automation draft if time allows — do not launch or save unless that is the step
-5. Run one: `/multitask`, `/loop`, `/autopilot`, or `/orchestrate`
-6. Show the verification layers
-7. Reset
+1. Demo error + Ask — connect the UI, versioned routes, client, seed, and test
+2. Repair the client from v1 to v2 unless `/orchestrate` is the chosen workflow; after the migration, paste the `/create-rule` guardrail prompt
+3. Open one shipped rule, one skill, one subagent
+4. Explain model choice in the picker
+5. Draft the Cloud Agent brief; open an Automation draft if time allows — do not launch or save unless that is the step
+6. Run one: `/multitask`, `/loop`, `/autopilot`, or `/orchestrate`
+7. Show the verification layers
+8. Reset
 
 ## Advanced short path (20–30 min)
 

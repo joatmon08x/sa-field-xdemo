@@ -19,7 +19,7 @@ Ship one new widget on `app/page.tsx` that looks native to the existing dashboar
 - Data must come from the seed via Prisma (`lib/data.ts`) — compute in cents, format with `formatUsd`. No invented numbers, no fourth catalog price.
 - Icons from `lucide-react`, sized `size-4` inside the tinted chip like the existing cards.
 - Age or window anything with the frozen clock in `lib/clock.ts`, never `Date.now()`.
-- If the KPI needs a new aggregate, add a pure helper to `lib/dashboard.ts` and a small Vitest case in `tests/dashboard.test.ts` (keep it passing — do not change `tests/dispute-credit.test.ts`).
+- If the KPI needs a new aggregate, add a pure helper to `lib/dashboard.ts` and a small Vitest case in `tests/dashboard.test.ts` (keep it passing — do not change `lib/disputes/suggested-credit-api.ts` or `tests/suggested-credit-api.test.ts`).
 
 ## Steps
 

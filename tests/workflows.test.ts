@@ -63,34 +63,38 @@ describe("prompt sync", () => {
 
     const beat = (id: (typeof DECK_BEATS_101)[number]["id"]) =>
       DECK_BEATS_101.find((entry) => entry.id === id);
+    const example = (id: (typeof DECK_BEATS_101)[number]["id"]) => {
+      const entry = beat(id);
+      return entry && "example" in entry ? entry.example : undefined;
+    };
 
-    expect(beat("ask")?.example).toBe("/ask Tell me what Ledgerly does in 3 sentences");
-    expect(beat("plan")?.example).toBe("/plan I want a new feature to update the customer email");
+    expect(example("ask")).toBe("/ask Tell me what Ledgerly does in 3 sentences");
+    expect(example("plan")).toBe("/plan I want a new feature to update the customer email");
     expect("example" in beat("agent-build")!).toBe(false);
-    expect(beat("model")?.example).toBe("/model");
-    expect(beat("debug")?.example).toBe("/debug the failing test");
-    expect(beat("create-rule")?.example).toBe(
+    expect(example("model")).toBe("/model");
+    expect(example("debug")).toBe("/debug the failing test");
+    expect(example("create-rule")).toBe(
       "/create-rule Customer emails should be redacted in the UI. Show the first two letters and domain in plaintext, redact the other letters.",
     );
-    expect(beat("create-skill")?.example).toBe(
+    expect(example("create-skill")).toBe(
       "/create-skill Break down a plan into individual tickets in backlog.",
     );
-    expect(beat("allowlist")?.example).toBe("Force shutdown the application servers");
+    expect(example("allowlist")).toBe("Force shutdown the application servers");
     expect(beat("allowlist")?.detail).toContain("ask to allow Run");
-    expect(beat("stop")?.example).toBe("Start the application on port 48080.");
+    expect(example("stop")).toBe("Start the application on port 48080.");
     expect(beat("stop")?.detail).toContain("Allowlist");
-    expect(beat("interrupt-steer")?.example).toBe("Start the application on its original port");
+    expect(example("interrupt-steer")).toBe("Start the application on its original port");
     expect(beat("interrupt-steer")?.detail).toContain("open the invoices view");
     expect(beat("mcp-ledgerly-db")?.title).toBe("MCP server");
     expect(beat("mcp-ledgerly-db")?.detail).toContain("Customize → MCP");
     expect(beat("mcp-ledgerly-db")?.detail).toContain(".cursor/mcp.json");
-    expect(beat("mcp-ledgerly-db")?.example).toContain("ledgerly-db MCP");
-    expect(beat("mcp-ledgerly-db")?.example).toContain("dsp_1043");
+    expect(example("mcp-ledgerly-db")).toContain("ledgerly-db MCP");
+    expect(example("mcp-ledgerly-db")).toContain("dsp_1043");
     expect(beat("canvas")?.title).toBe("Canvas");
     expect(beat("canvas")?.detail).toContain(
       "Use Canvas to generate interactive artifacts that render next to the chat.",
     );
-    expect(beat("canvas")?.example).toBe(
+    expect(example("canvas")).toBe(
       "Create a canvas repeating the 101 workflow we took today.",
     );
 

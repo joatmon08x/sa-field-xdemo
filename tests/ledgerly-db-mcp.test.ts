@@ -25,12 +25,11 @@ describe("ledgerly-db MCP queries", () => {
     expect(result.invoices[0]?.total).toMatch(/^\$/);
   });
 
-  it("fetches dsp_1043 with the planted over-cap suggested credit", async () => {
+  it("fetches dsp_1043 with the catalog-capped stored credit", async () => {
     const dispute = await getDispute("dsp_1043");
     expect(dispute).not.toBeNull();
-    expect(dispute!.suggestedCreditCents).toBe(40000);
-    expect(dispute!.suggestedCreditCents).toBeGreaterThan(PLAN_PRICE_CENTS.SCALE);
-    expect(dispute!.suggestedCredit).toBe("$400.00");
+    expect(dispute!.suggestedCreditCents).toBe(PLAN_PRICE_CENTS.SCALE);
+    expect(dispute!.suggestedCredit).toBe("$249.00");
     expect(dispute!.invoice.plan).toBe("SCALE");
   });
 

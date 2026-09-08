@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/page-header";
+import { SuggestedCredit } from "@/components/disputes/suggested-credit";
 import { DisputeStatusBadge, InvoiceStatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,10 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getDispute } from "@/lib/data";
 import { formatDate } from "@/lib/dates";
-import { suggestDisputeCredit } from "@/lib/dispute-credit";
 import { formatUsd } from "@/lib/money";
 import { isPlanId, planLabel, planPriceCents } from "@/lib/plans";
-import { cn } from "@/lib/utils";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -26,13 +25,6 @@ export default async function DisputeDetailPage({ params }: { params: Promise<{ 
   if (!isPlanId(dispute.invoice.plan)) notFound();
 
   const catalogPrice = planPriceCents(dispute.invoice.plan);
-  // Recomputed on every render so the panel tracks lib/dispute-credit.ts
-  // rather than whatever was stored when the dispute was opened.
-  const suggestedCredit = suggestDisputeCredit({
-    disputedAmountCents: dispute.disputedAmountCents,
-    planPriceCents: catalogPrice,
-  });
-  const overCatalog = suggestedCredit > catalogPrice;
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -84,7 +76,7 @@ export default async function DisputeDetailPage({ params }: { params: Promise<{ 
           1. lib/disputes/resolve.ts
           2. app/api/disputes/[id]/resolve/route.ts
           3. this panel — enable Accept / Decline and persist a reviewer note
-        Suggested credit must use the catalog cap. See tests/dispute-credit.test.ts.
+        The suggested-credit client has its own planted API-version seam.
       */}
       <Card className="border-dashed">
         <CardHeader>
@@ -96,26 +88,11 @@ export default async function DisputeDetailPage({ params }: { params: Promise<{ 
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div
-            className={cn(
-              "rounded-md px-3 py-2",
-              overCatalog ? "bg-danger-soft" : "bg-indigo-soft",
-            )}
-          >
-            <p
-              className={cn(
-                "text-lg font-semibold tracking-tight",
-                overCatalog ? "text-danger" : "text-foreground",
-              )}
-            >
-              Suggested credit {formatUsd(suggestedCredit)}
-            </p>
-            <p className={cn("text-xs", overCatalog ? "text-danger" : "text-muted-foreground")}>
-              {overCatalog
-                ? `Above the ${planLabel(dispute.invoice.plan)} catalog price of ${formatUsd(catalogPrice)}. Ledgerly must never credit more than it charged.`
-                : `Within the ${planLabel(dispute.invoice.plan)} catalog price of ${formatUsd(catalogPrice)}.`}
-            </p>
-          </div>
+          <SuggestedCredit
+            disputeId={dispute.id}
+            catalogPriceCents={catalogPrice}
+            planName={planLabel(dispute.invoice.plan)}
+          />
 
           <Label htmlFor="reviewer-note">Reviewer note</Label>
           <Textarea

@@ -18,7 +18,7 @@ Do **not** queue four jobs in one agent. Do **not** start a sibling after anothe
 
 1. Find what is independent. Dependent work waits.
 2. In **one** turn, launch one Task subagent per piece. For route instrumentation, use `api-instrumenter` and name **one** route in that prompt.
-3. Each dispatch prompt includes: the files, the shared helper path, the constraint (no prices, no seed, no `tests/dispute-credit.test.ts`), and how to verify that piece.
+3. Each dispatch prompt includes: the files, the shared helper path, the constraint (no prices, no seed, no suggested-credit client, no `tests/suggested-credit-api.test.ts`), and how to verify that piece.
 4. After the diffs land, launch `ledgerly-reviewer` on the combined diff.
 5. Tell the user there is one review per task.
 

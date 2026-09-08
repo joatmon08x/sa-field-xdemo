@@ -15,7 +15,7 @@ Local `/loop` lives inside this session and dies when the laptop closes. A Cloud
 
 ## /goal in the cloud
 
-Use the `/goal` prompt from `lib/workflows/meta.ts` verbatim. Scope the finish line so it is verifiable (`npm test` green, `dsp_1043` suggested credit at or below $249). The agent judges when the objective is met; you review.
+Use the `/goal` prompt from `lib/workflows/meta.ts` verbatim. Scope the finish line so it is verifiable: the client selects v2, both routes remain, `npm test` is green, `dsp_1043` shows $249, and dispute resolution works. The agent judges when the objective is met; you review.
 
 ## /autopilot
 
@@ -29,7 +29,7 @@ This one is a **plugin**, not built in. Before running it:
 - `CURSOR_API_KEY` — a personal key or a team service account, not a team admin key
 - Slack is optional and mirrors the run in a thread
 
-The root planner writes no code. Workers are isolated; every handoff points up. Name `dispute-verifier` as the verifier for the dispute-resolution goal. Republish a task if a verifier fails.
+The root planner writes no code. Workers are isolated; every handoff points up. Split the v1-to-v2 client migration from the dispute-resolution stub work. Name `dispute-verifier` as the verifier. Republish a task if a verifier fails.
 
 ## What you keep
 

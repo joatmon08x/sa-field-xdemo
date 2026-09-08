@@ -30,7 +30,7 @@ export const DEMO_TRACKS = [
     id: "201" as const,
     title: "201",
     description:
-      "Deck-aligned: orient, customize the agent, choose models, show Cloud Agents and Automations, then breadth, time, PR ownership, planning, and verification.",
+      "Deck-aligned: orient, repair the planted v1 client selection, create the v2-only rule live, customize the agent, choose models, show Cloud Agents and Automations, then breadth, time, PR ownership, planning, and verification.",
     workflowSlugs: ["multitask", "loop", "autopilot", "orchestrate"] as const,
   },
   {
@@ -144,7 +144,7 @@ Use the dispatch-subagents skill. Launch four api-instrumenter subagents in one 
 - app/api/mock/nudge/route.ts
 - app/api/mock/pulse/route.ts
 
-A shared helper may live under lib/. Each worker starts with clean context; the dispatch prompt must name the files, the helper, and the constraint. After the diffs land, launch the ledgerly-reviewer subagent. Do not touch prices, prisma/seed.ts, prisma/extra-accounts.ts, or tests/dispute-credit.test.ts. I will review one diff per task.`,
+A shared helper may live under lib/. Each worker starts with clean context; the dispatch prompt must name the files, the helper, and the constraint. After the diffs land, launch the ledgerly-reviewer subagent. Do not touch prices, prisma/seed.ts, prisma/extra-accounts.ts, lib/disputes/suggested-credit-api.ts, or tests/suggested-credit-api.test.ts. I will review one diff per task.`,
   },
   {
     slug: "loop",
@@ -181,7 +181,7 @@ If this branch has no open pull request, stop and say so. Do not open a PR or me
 
 Refresh the live PR state before every pass. Work in this order: merge conflicts, active unresolved review comments (including Bugbot), then failing required checks. Validate each finding before acting. Fix only issues caused by this PR and keep every change inside its scope.
 
-Never change CI checks, workflows, the Ledgerly catalog, prisma/seed.ts, prisma/extra-accounts.ts, or tests/dispute-credit.test.ts to get green. Stop and ask if branch intent is ambiguous or a billing, security, privacy, migration, or concurrency comment needs judgment. Report ready only when the PR is mergeable, required checks are green, and every active comment is triaged. Do not merge or enable auto-merge; I still review and merge.`,
+Never change CI checks, workflows, the Ledgerly catalog, prisma/seed.ts, prisma/extra-accounts.ts, or tests/suggested-credit-api.test.ts to get green. Preserve both suggested-credit API routes. Stop and ask if branch intent is ambiguous or a billing, security, privacy, migration, or concurrency comment needs judgment. Report ready only when the PR is mergeable, required checks are green, and every active comment is triaged. Do not merge or enable auto-merge; I still review and merge.`,
   },
   {
     slug: "goal",
@@ -196,13 +196,13 @@ Never change CI checks, workflows, the Ledgerly catalog, prisma/seed.ts, prisma/
       "/goal Read the goal entry in WORKFLOWS from lib/workflows/meta.ts and run its prompt exactly.",
     prompt: `/goal Make Ledgerly demo-complete for dispute resolution.
 
-1. Cap suggestDisputeCredit in lib/dispute-credit.ts at the catalog plan price from lib/plans.ts.
+1. Diagnose why the dispute page still uses the deprecated suggested-credit API, then switch lib/disputes/suggested-credit-api.ts from v1 to v2. Preserve both routes.
 2. Implement resolveDispute in lib/disputes/resolve.ts.
 3. Make POST /api/disputes/[id]/resolve persist ACCEPTED or DECLINED with the reviewer note.
 4. Enable the Accept credit / Decline buttons on app/disputes/[id]/page.tsx.
 5. Keep going across turns until npm test is fully green and http://127.0.0.1:43173/disputes/dsp_1043 shows suggested credit at or below the Scale catalog price of $249.
 
-Do not change prisma/seed.ts, prisma/extra-accounts.ts, or tests/dispute-credit.test.ts. Do not invent a fourth price. When the checks pass, launch the dispute-verifier subagent to report evidence. I still review the result.`,
+Do not change either suggested-credit route, prisma/seed.ts, prisma/extra-accounts.ts, or tests/suggested-credit-api.test.ts. Preserve the $400 claim. Do not invent a fourth price. When the checks pass, launch the dispute-verifier subagent to report evidence. I still review the result.`,
   },
   {
     slug: "orchestrate",
@@ -220,11 +220,11 @@ Do not change prisma/seed.ts, prisma/extra-accounts.ts, or tests/dispute-credit.
 
 Decompose the work. The root planner writes no code. Workers are isolated; every handoff points up. Staff at least:
 
-- Worker: cap suggestDisputeCredit in lib/dispute-credit.ts at the catalog plan price. Do not touch tests/dispute-credit.test.ts or the seed.
+- Worker: diagnose the deprecated suggested-credit client selection and switch lib/disputes/suggested-credit-api.ts from v1 to v2. Preserve both routes; do not touch tests/suggested-credit-api.test.ts or the seed.
 - Worker: implement resolveDispute and POST /api/disputes/[id]/resolve.
 - Worker: enable Accept / Decline on app/disputes/[id]/page.tsx.
 
-Launch the dispute-verifier subagent as the verifier: it checks tests/dispute-credit.test.ts (or npm test), POSTs accept/decline against dsp_1043, and loads http://127.0.0.1:43173/disputes/dsp_1043. Republish a task if a verifier fails. I still review and merge. Do not invent a fourth price.`,
+Launch the dispute-verifier subagent as the verifier: it checks tests/suggested-credit-api.test.ts (or npm test), confirms both suggested-credit routes still work, POSTs accept/decline against dsp_1043, and loads http://127.0.0.1:43173/disputes/dsp_1043. Republish a task if a verifier fails. I still review and merge. Do not invent a fourth price.`,
   },
 ];
 

@@ -114,7 +114,7 @@ export function createLedgerlyDbServer(): McpServer {
     "get_dispute",
     {
       description:
-        "Fetch one dispute by id (e.g. dsp_1043). Suggested credit may exceed the Scale catalog price on purpose.",
+        "Fetch one dispute by id (e.g. dsp_1043). Stored suggested credit is capped at the catalog plan price.",
       inputSchema: {
         id: z.string().describe("Dispute id"),
       },
