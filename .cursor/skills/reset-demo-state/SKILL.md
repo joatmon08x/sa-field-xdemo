@@ -5,7 +5,7 @@ description: Put a Ledgerly demo machine back to the shipped state — reseed SQ
 
 # Reset the demo state
 
-Goal state: seeded Fieldnote book, dev server on 43173, and `npm test` showing exactly **1 failed / 9 passed**. Restore `lib/dispute-credit.ts` if a prior demo capped the credit.
+Goal state: seeded Fieldnote book, dev server on 43173, and `npm test` showing exactly **1 failed / 20 passed**. Restore `lib/disputes/suggested-credit-api.ts` if a prior demo switched the client to v2.
 
 ## Checklist (run what applies)
 
@@ -13,7 +13,8 @@ Goal state: seeded Fieldnote book, dev server on 43173, and `npm test` showing e
 
 ```bash
 git status
-git checkout -- lib/dispute-credit.ts   # the sanctioned fix beat turns this green; red is shipped
+git checkout -- lib/disputes/suggested-credit-api.ts   # shipped client selects v1
+rm -f .cursor/rules/suggested-credit-api-v2.mdc       # live /create-rule beat only
 git checkout -- .                        # only if the user agrees to drop ALL local changes
 ```
 
@@ -37,14 +38,15 @@ npm run dev
 4. **Verify shipped state**
 
 ```bash
-npm test    # expect: 1 failed (dispute-credit), 9 passed
+npm test    # expect: 1 failed (suggested-credit-api), 20 passed
 ```
 
 Open `http://127.0.0.1:43173` — dashboard shows Fieldnote data, catalog $49/$99/$249, disputes badge on the sidebar.
 
-Open `http://127.0.0.1:43173/disputes/dsp_1043` — the Resolution panel shows a red **Suggested credit $400.00** above the $249 Scale price. If it reads $249.00, the sanctioned fix is still applied: `git checkout -- lib/dispute-credit.ts`.
+Open `http://127.0.0.1:43173/disputes/dsp_1043` — the Resolution panel shows a red **Suggested credit $400.00** from v1 above the $249 Scale price. Confirm `/api/v2/disputes/dsp_1043/suggested-credit` returns $249.00 and the ledgerly-db MCP reports stored credit $249.00. If the page reads $249.00 from v2, restore `lib/disputes/suggested-credit-api.ts`.
 
 ## Never
 
 - Never delete `prisma/seed.ts` data or add customers to "fix" a demo.
-- Never commit a green `lib/dispute-credit.ts` to main to make CI happy — red is the product.
+- Never edit `tests/suggested-credit-api.test.ts`, either API route, or the seed to make the shipped red test green.
+- Never leave `.cursor/rules/suggested-credit-api-v2.mdc` in the shipped tree; create and remove it during the live rule beat.

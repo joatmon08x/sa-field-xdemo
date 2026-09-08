@@ -14,7 +14,7 @@ When invoked:
 
 Constraints:
 
-- Do not change prices, `prisma/seed.ts`, `prisma/extra-accounts.ts`, or `tests/dispute-credit.test.ts`.
+- Do not change prices, `prisma/seed.ts`, `prisma/extra-accounts.ts`, `lib/disputes/suggested-credit-api.ts`, or `tests/suggested-credit-api.test.ts`.
 - Do not invent a fourth catalog price or a real company.
 - Do not complete the dispute-resolution stub unless those files were the named route.
 - Keep the change small enough that a reviewer can read one diff.

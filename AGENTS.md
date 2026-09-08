@@ -51,11 +51,11 @@ Listens on **43173** (not 3000).
 npm test
 ```
 
-One test is intentionally failing. Do not change `tests/dispute-credit.test.ts` or `lib/dispute-credit.ts` unless the user asked to cap suggested credit. Do not change the seed.
+One test is intentionally failing: `tests/suggested-credit-api.test.ts` expects the client to use v2 while `lib/disputes/suggested-credit-api.ts` intentionally selects deprecated v1. Preserve both routes and do not change the test or seed to get green.
 
 Passing tests include `tests/money.test.ts` and `tests/plans.test.ts`. Environment start seeds the database and runs only the passing tests so a red suite cannot mark the machine as failed to boot.
 
-Shipped suite on a clean tree: **1 failed / 9 passed**.
+Shipped suite on a clean tree: **1 failed / 20 passed**. The `dsp_1043` page shows v1's $400 result; v2 and the stored credit are correctly capped at $249.
 
 ### Multi-file stub (leave it unless asked)
 
@@ -84,4 +84,4 @@ Incomplete on purpose:
 | `.cursor/skills/choose-cursor-workflow/` | Pick a track, then `/multitask` `/loop` `/autopilot` `/goal` `/orchestrate` |
 | `.cursor/skills/dispatch-subagents/` | Parallel Task launches |
 | `.cursor/skills/hand-to-cloud-agent/` | Cloud `/goal`, `/autopilot`, and `/orchestrate` |
-| `.cursor/mcp.json` → `ledgerly-db` | Local read-only Prisma MCP (`mcp/ledgerly-db/`). 101 beat after `/create-skill`. |
+| `.cursor/mcp.json` → `ledgerly-db` | Local read-only Prisma MCP (`mcp/ledgerly-db/`). The 101 track ends on Canvas and a slide-generating MCP, not this server. |

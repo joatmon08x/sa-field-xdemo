@@ -18,36 +18,12 @@ export type WorkflowMeta = {
   prompt: string;
 };
 
-export const DEMO_TRACKS = [
-  {
-    id: "101" as const,
-    title: "101",
-    description:
-      "Ask → Plan → Agent, then /model, /debug, /create-rule, /create-skill, MCP server, run control, and Canvas: orient on Ledgerly, plan and build a customer email update, change the model, fix a failing test, add a project rule and skill, start the app and MCP server, query the book, approvals and steering, then generate a Canvas of the track.",
-    workflowSlugs: [] as const,
-  },
-  {
-    id: "201" as const,
-    title: "201",
-    description:
-      "Deck-aligned: orient, customize the agent, choose models, show Cloud Agents and Automations, then breadth, time, PR ownership, planning, and verification.",
-    workflowSlugs: ["multitask", "loop", "autopilot", "orchestrate"] as const,
-  },
-  {
-    id: "advanced" as const,
-    title: "Advanced",
-    description:
-      "Deeper Ledgerly scenarios: Cursor CLI primer, durable goals, parallel workers, scheduled checking, PR supervision, planner trees, and verifier evidence.",
-    workflowSlugs: ["goal", "multitask", "loop", "autopilot", "orchestrate"] as const,
-  },
-] as const;
-
 export const DECK_BEATS_101 = [
   {
     id: "ask",
     title: "Ask",
-    detail: "Read-only orientation before planning.",
-    example: "/ask Tell me what Ledgerly does in 3 sentences",
+    detail: "Read-only orientation before planning. Learn about the application.",
+    example: "/ask Tell me what this application does in 3 sentences",
   },
   {
     id: "plan",
@@ -57,14 +33,9 @@ export const DECK_BEATS_101 = [
   },
   {
     id: "agent-build",
-    title: "Agent mode to build",
+    title: "Build in Agent mode",
     detail: "Switch to Agent mode and implement the plan. Review the diff before accepting.",
-  },
-  {
-    id: "model",
-    title: "Model",
-    detail: "Change the model for the next pass.",
-    example: "/model",
+    example: "Build the plan locally.",
   },
   {
     id: "debug",
@@ -73,54 +44,98 @@ export const DECK_BEATS_101 = [
     example: "/debug the failing test",
   },
   {
-    id: "create-rule",
-    title: "Create a rule",
-    detail:
-      "Use /create-rule to add a project guardrail, then open `.cursor/rules` to review what was written.",
-    example:
-      "/create-rule Customer emails should be redacted in the UI. Show the first two letters and domain in plaintext, redact the other letters.",
+    id: "plan-fix",
+    title: "Plan the fix",
+    detail: "Shift-tab to toggle between modes. Return to Plan mode and draft a plan to fix the bug.",
+    example: "/plan draft a plan to fix the bug",
   },
   {
-    id: "create-skill",
-    title: "Create a project skill",
-    detail:
-      "Use /create-skill to add a project skill, then open `.cursor/skills` to review what was written.",
-    example: "/create-skill Break down a plan into individual tickets in backlog.",
+    id: "model-fast",
+    title: "Change to a fast model",
+    detail: "Change to a faster model for a bug fix.",
+    example: "/model build the fix",
   },
   {
-    id: "allowlist",
-    title: "Allowlist",
-    detail:
-      "Paste the prompt. Cursor should ask to allow Run before shutting the app down.",
-    example: "Force shutdown the application servers",
+    id: "model-intelligent",
+    title: "Change to a deep model",
+    detail: "Change to a deeper model to plan a more complex feature.",
+    example: "/model /plan Redact the customer email in the UI. The first two characters and domain are plaintext.",
   },
   {
     id: "stop",
     title: "Stop",
-    detail: "Go to Settings -> Agent -> Execution & Approvals and change to Allowlist. Paste the prompt so the agent starts a long-running command, then stop the command.",
-    example: "Start the application on port 48080.",
+    detail: "Stop the plan.",
+    example: "Ask me questions if you are uncertain. Start the plan again.",
   },
   {
     id: "interrupt-steer",
     title: "Interrupt and steer",
-    detail:
-      'Submit the prompt, then edit inline to: "Start the application on its original port and open the invoices view".',
-    example: "Start the application on its original port",
+    detail: "Submit the prompt, then edit inline and re-submit.",
+    example: "/plan Redact the customer email in the UI. Show it in plaintext if I click an icon.",
   },
   {
-    id: "mcp-ledgerly-db",
-    title: "MCP server",
+    id: "diffs",
+    title: "Build and review diffs",
+    detail: "Review the changes from the agent's last turn under Changes.",
+    example: "Go build it, I’m going to do something else. Let me know when you have a working feature.",
+  },
+  {
+    id: "rule",
+    title: "Create a project rule",
     detail:
-      "Enable ledgerly-db in Cursor. Go to Customize → MCP -> ledgerly-db. Open `.cursor/mcp.json`. Start the application and the MCP server, confirm it is connected, then query the live SQLite book.",
+      "Use /create-rule to add a project rule, which defines what the agent must do. Review the rule in Customize -> Rules.",
     example:
-      "Using the ledgerly-db MCP, list overdue invoices and fetch dispute dsp_1043. Report totals in dollars and cite which MCP tools you called. Do not edit any files.",
+      "/create-rule New features should use the new API instead of the legacy API.",
+  },
+  {
+    id: "skill",
+    title: "Create a project skill",
+    detail:
+      "Use /create-skill to add a project skill, which defines how the agent must do something. Review the rule in Customize -> Skills.",
+    example: "/create-skill Use domain-driven design to break down the domains in this application and match it to available APIs or data schemas.",
   },
   {
     id: "canvas",
     title: "Canvas",
     detail:
       "Use Canvas to generate interactive artifacts that render next to the chat.",
-    example: "Create a canvas repeating the 101 workflow we took today.",
+    example: "Create a canvas explaining what we did today.",
+  },
+  {
+    id: "mcp",
+    title: "MCP server",
+    detail:
+      "Enable a slide-generating MCP server in Cursor. Go to Customize → MCP -> Figma / Google Slides.",
+    example:
+      "Create a slideshow in Google Slides based on the Canvas. I want to use this as part of my demo showcase. Do not edit any files.",
+  },
+] as const;
+
+export function deckBeats101Sequence(): string {
+  return DECK_BEATS_101.map((beat) => beat.title).join(" → ");
+}
+
+export const DEMO_TRACKS = [
+  {
+    id: "101" as const,
+    title: "101",
+    description:
+      "You will explore different ways to work in Cursor, use modes and models for the right tasks, apply rules and skills to ensure consistent quality, and complete at least one task with an agent.",
+    workflowSlugs: [] as const,
+  },
+  {
+    id: "201" as const,
+    title: "201",
+    description:
+      "Deck-aligned: orient, repair the planted v1 client selection, create the v2-only rule live, customize the agent, choose models, show Cloud Agents and Automations, then breadth, time, PR ownership, planning, and verification.",
+    workflowSlugs: ["multitask", "loop", "autopilot", "orchestrate"] as const,
+  },
+  {
+    id: "advanced" as const,
+    title: "Advanced",
+    description:
+      "Deeper Ledgerly scenarios: Cursor CLI primer, durable goals, parallel workers, scheduled checking, PR supervision, planner trees, and verifier evidence.",
+    workflowSlugs: ["goal", "multitask", "loop", "autopilot", "orchestrate"] as const,
   },
 ] as const;
 
@@ -144,7 +159,7 @@ Use the dispatch-subagents skill. Launch four api-instrumenter subagents in one 
 - app/api/mock/nudge/route.ts
 - app/api/mock/pulse/route.ts
 
-A shared helper may live under lib/. Each worker starts with clean context; the dispatch prompt must name the files, the helper, and the constraint. After the diffs land, launch the ledgerly-reviewer subagent. Do not touch prices, prisma/seed.ts, prisma/extra-accounts.ts, or tests/dispute-credit.test.ts. I will review one diff per task.`,
+A shared helper may live under lib/. Each worker starts with clean context; the dispatch prompt must name the files, the helper, and the constraint. After the diffs land, launch the ledgerly-reviewer subagent. Do not touch prices, prisma/seed.ts, prisma/extra-accounts.ts, lib/disputes/suggested-credit-api.ts, or tests/suggested-credit-api.test.ts. I will review one diff per task.`,
   },
   {
     slug: "loop",
@@ -181,7 +196,7 @@ If this branch has no open pull request, stop and say so. Do not open a PR or me
 
 Refresh the live PR state before every pass. Work in this order: merge conflicts, active unresolved review comments (including Bugbot), then failing required checks. Validate each finding before acting. Fix only issues caused by this PR and keep every change inside its scope.
 
-Never change CI checks, workflows, the Ledgerly catalog, prisma/seed.ts, prisma/extra-accounts.ts, or tests/dispute-credit.test.ts to get green. Stop and ask if branch intent is ambiguous or a billing, security, privacy, migration, or concurrency comment needs judgment. Report ready only when the PR is mergeable, required checks are green, and every active comment is triaged. Do not merge or enable auto-merge; I still review and merge.`,
+Never change CI checks, workflows, the Ledgerly catalog, prisma/seed.ts, prisma/extra-accounts.ts, or tests/suggested-credit-api.test.ts to get green. Preserve both suggested-credit API routes. Stop and ask if branch intent is ambiguous or a billing, security, privacy, migration, or concurrency comment needs judgment. Report ready only when the PR is mergeable, required checks are green, and every active comment is triaged. Do not merge or enable auto-merge; I still review and merge.`,
   },
   {
     slug: "goal",
@@ -196,13 +211,13 @@ Never change CI checks, workflows, the Ledgerly catalog, prisma/seed.ts, prisma/
       "/goal Read the goal entry in WORKFLOWS from lib/workflows/meta.ts and run its prompt exactly.",
     prompt: `/goal Make Ledgerly demo-complete for dispute resolution.
 
-1. Cap suggestDisputeCredit in lib/dispute-credit.ts at the catalog plan price from lib/plans.ts.
+1. Diagnose why the dispute page still uses the deprecated suggested-credit API, then switch lib/disputes/suggested-credit-api.ts from v1 to v2. Preserve both routes.
 2. Implement resolveDispute in lib/disputes/resolve.ts.
 3. Make POST /api/disputes/[id]/resolve persist ACCEPTED or DECLINED with the reviewer note.
 4. Enable the Accept credit / Decline buttons on app/disputes/[id]/page.tsx.
 5. Keep going across turns until npm test is fully green and http://127.0.0.1:43173/disputes/dsp_1043 shows suggested credit at or below the Scale catalog price of $249.
 
-Do not change prisma/seed.ts, prisma/extra-accounts.ts, or tests/dispute-credit.test.ts. Do not invent a fourth price. When the checks pass, launch the dispute-verifier subagent to report evidence. I still review the result.`,
+Do not change either suggested-credit route, prisma/seed.ts, prisma/extra-accounts.ts, or tests/suggested-credit-api.test.ts. Preserve the $400 claim. Do not invent a fourth price. When the checks pass, launch the dispute-verifier subagent to report evidence. I still review the result.`,
   },
   {
     slug: "orchestrate",
@@ -220,11 +235,11 @@ Do not change prisma/seed.ts, prisma/extra-accounts.ts, or tests/dispute-credit.
 
 Decompose the work. The root planner writes no code. Workers are isolated; every handoff points up. Staff at least:
 
-- Worker: cap suggestDisputeCredit in lib/dispute-credit.ts at the catalog plan price. Do not touch tests/dispute-credit.test.ts or the seed.
+- Worker: diagnose the deprecated suggested-credit client selection and switch lib/disputes/suggested-credit-api.ts from v1 to v2. Preserve both routes; do not touch tests/suggested-credit-api.test.ts or the seed.
 - Worker: implement resolveDispute and POST /api/disputes/[id]/resolve.
 - Worker: enable Accept / Decline on app/disputes/[id]/page.tsx.
 
-Launch the dispute-verifier subagent as the verifier: it checks tests/dispute-credit.test.ts (or npm test), POSTs accept/decline against dsp_1043, and loads http://127.0.0.1:43173/disputes/dsp_1043. Republish a task if a verifier fails. I still review and merge. Do not invent a fourth price.`,
+Launch the dispute-verifier subagent as the verifier: it checks tests/suggested-credit-api.test.ts (or npm test), confirms both suggested-credit routes still work, POSTs accept/decline against dsp_1043, and loads http://127.0.0.1:43173/disputes/dsp_1043. Republish a task if a verifier fails. I still review and merge. Do not invent a fourth price.`,
   },
 ];
 

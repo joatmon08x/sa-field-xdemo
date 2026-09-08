@@ -287,8 +287,8 @@ const INVOICES = [
 
 const DISPUTES = [
   {
-    // Claims more than the invoice charges, so the uncapped suggestion in
-    // lib/dispute-credit.ts is visible on the dispute page, not only in tests.
+    // The $400 claim is valid input for testing the catalog cap. The deprecated
+    // v1 suggested-credit API intentionally mistakes this claim for the credit.
     id: "dsp_1043",
     invoiceId: "inv_1043",
     status: "NEEDS_REVIEW",
