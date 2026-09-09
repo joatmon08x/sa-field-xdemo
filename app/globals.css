@@ -186,19 +186,3 @@ body {
   background: var(--indigo-soft);
   color: var(--indigo);
 }
-
-.runbook-panels > section {
-  display: none;
-}
-
-.runbook-panels > section:first-child {
-  display: block;
-}
-
-.runbook-panels:has(> section:target) > section:first-child:not(:target) {
-  display: none;
-}
-
-.runbook-panels:has(> section:target) > section:target {
-  display: block;
-}

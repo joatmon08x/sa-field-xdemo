@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { HashScroll } from "@/components/hash-scroll";
 import { PageHeader } from "@/components/page-header";
 import { RunbookCatalog } from "@/components/runbook-catalog";
 import { RunbookCatalogSelect } from "@/components/runbook-catalog-select";
@@ -6,7 +7,6 @@ import {
   RUNBOOK_TRACKS,
   getRunbook,
   getRunbookTrack,
-  type DemoSection,
   type RunbookMeta,
 } from "@/lib/runbooks/meta";
 
@@ -35,6 +35,7 @@ export default async function RunbookTrackPage({
 
   return (
     <div className="space-y-6">
+      <HashScroll />
       <PageHeader
         eyebrow="Demo catalog"
         title="Runbooks"
@@ -53,11 +54,7 @@ export default async function RunbookTrackPage({
         </p>
       </div>
 
-      <RunbookCatalog
-        trackId={track.id}
-        sections={track.sections as DemoSection[]}
-        runbooks={runbooks}
-      />
+      <RunbookCatalog trackId={track.id} sections={track.sections} runbooks={runbooks} />
     </div>
   );
 }

@@ -118,21 +118,19 @@ export function RunbookCatalog({
         ))}
       </nav>
 
-      <div className="runbook-panels">
+      <div className="space-y-10">
         {sections.map((section) => (
-          <section key={section.id} id={section.id} className="scroll-mt-24">
+          <section key={section.id} id={section.id} className="scroll-mt-20">
             <SectionPanel section={section} />
           </section>
         ))}
         {runbooks.length > 0 ? (
-          <section id={RUNBOOK_COMMANDS_ANCHOR} className="scroll-mt-24">
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold tracking-tight">Runbook commands</h3>
-              <div className="grid gap-4 lg:grid-cols-2">
-                {runbooks.map((runbook) => (
-                  <RunbookCard key={`${trackId}-${runbook.slug}`} runbook={runbook} />
-                ))}
-              </div>
+          <section id={RUNBOOK_COMMANDS_ANCHOR} className="scroll-mt-20 space-y-3">
+            <h3 className="text-lg font-semibold tracking-tight">Runbook commands</h3>
+            <div className="grid gap-4 lg:grid-cols-2">
+              {runbooks.map((runbook) => (
+                <RunbookCard key={`${trackId}-${runbook.slug}`} runbook={runbook} />
+              ))}
             </div>
           </section>
         ) : null}
