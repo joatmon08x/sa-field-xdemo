@@ -18,10 +18,19 @@ export type WorkflowMeta = {
   prompt: string;
 };
 
+/**
+ * Outline `prompt_type`. Not rendered on /workflows — a later skill uses it to
+ * keep reusable prompts, rewrite adaptable ones for a non-Ledgerly demo, and
+ * skip beats with none.
+ */
+export type BeatPromptType = "reusable" | "adaptable" | "none";
+
 export const DECK_BEATS_101 = [
   {
     id: "ask",
     title: "Ask",
+    section: "How do I write my first prompt?",
+    prompt_type: "reusable" as const,
     detail:
       "Let’s ask questions about the application. In Ask mode, the agent understands the files. It is read-only.",
     example: "/ask Tell me what this application does in 3 sentences",
@@ -29,18 +38,24 @@ export const DECK_BEATS_101 = [
   {
     id: "plan",
     title: "Plan",
+    section: "How do I write my first prompt?",
+    prompt_type: "adaptable" as const,
     detail: "Let’s plan out the feature. In Plan mode, the agent maps its approach.",
     example: "/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
   },
   {
     id: "agent-build",
     title: "Build in Agent mode",
+    section: "How do I write my first prompt?",
+    prompt_type: "none" as const,
     detail:
       "Agent mode is the default. It makes the change. Build the plan locally. Check the feature in the UI.",
   },
   {
     id: "debug",
     title: "Debug",
+    section: "How do I write my first prompt?",
+    prompt_type: "reusable" as const,
     detail:
       "Let’s try to fix it using Debug mode. In Debug mode, you verify the change and investigate and fix any issues.",
     example: "/debug the failing test",
@@ -48,29 +63,39 @@ export const DECK_BEATS_101 = [
   {
     id: "model-fast",
     title: "Change to a fast model",
+    section: "How do I write my first prompt?",
+    prompt_type: "adaptable" as const,
     detail: "Let’s change the model to something faster. Change model from Auto to Fast.",
     example: "/model.",
   },
   {
     id: "fix",
     title: "Plan to fix the bug",
+    section: "How do I write my first prompt?",
+    prompt_type: "adaptable" as const,
     detail: "Show shift-tab to toggle between modes.",
     example: "/plan draft a plan to fix the bug",
   },
   {
     id: "allowlist",
     title: "Run Mode Allowlist",
+    section: "How do I work with an AI agent?",
+    prompt_type: "none" as const,
     detail: "Go to Settings → Agents → Executions & Approvals → Run Mode → Allowlist.",
   },
   {
     id: "model-deep",
     title: "Change to a deep / intelligent model",
+    section: "How do I work with an AI agent?",
+    prompt_type: "reusable" as const,
     detail: "Change model to intelligent model.",
     example: "/model",
   },
   {
     id: "start-and-stop",
     title: "Redact (partial)",
+    section: "How do I work with an AI agent?",
+    prompt_type: "adaptable" as const,
     detail:
       "Update the email feature; security recommended redacting a portion of the customer email.",
     example: "Redact the customer email in the UI. The first two characters and domain are plaintext.",
@@ -78,22 +103,30 @@ export const DECK_BEATS_101 = [
   {
     id: "stop",
     title: "Stop the prompt",
+    section: "How do I work with an AI agent?",
+    prompt_type: "none" as const,
     detail: "Stop the prompt with the Stop button.",
   },
   {
     id: "interrupt-steer",
     title: "Interrupt and steer",
+    section: "How do I work with an AI agent?",
+    prompt_type: "adaptable" as const,
     detail: "Steer the prompt. Show how the agent pauses for your approval. Continue each file.",
     example: "Redact the customer email in the UI. Show it in plaintext if I click an icon. Stop every time you change a file for me to review.",
   },
   {
     id: "diffs",
     title: "Review diffs",
+    section: "How do I work with an AI agent?",
+    prompt_type: "none" as const,
     detail: "Show diffs from agent’s last turn.",
   },
   {
     id: "rule",
     title: "Create a user rule",
+    section: "How do I govern my agent?",
+    prompt_type: "adaptable" as const,
     detail:
       "Let’s create a user rule so the agent doesn’t do it again. Show the user rule in the UI and how it can be changed.",
     example:
@@ -102,6 +135,8 @@ export const DECK_BEATS_101 = [
   {
     id: "test-rule",
     title: "Test the rule",
+    section: "How do I govern my agent?",
+    prompt_type: "adaptable" as const,
     detail: "Check the rule is applied.",
     example:
       "Add a new feature to show the current cap for dispute credit. Make clear which API you’re referencing.",
@@ -109,6 +144,8 @@ export const DECK_BEATS_101 = [
   {
     id: "skill",
     title: "Create a user skill",
+    section: "How do I govern my agent?",
+    prompt_type: "adaptable" as const,
     detail:
       "Let’s create a user skill that tells me the domain breakdown and available APIs. Show the user skill in the UI and how it can be changed.",
     example:
@@ -117,12 +154,16 @@ export const DECK_BEATS_101 = [
   {
     id: "test-skill",
     title: "Test the skill",
+    section: "How do I govern my agent?",
+    prompt_type: "adaptable" as const,
     detail: "Use the skill (no file edits).",
     example: "Use domain-driven design on this application. Do not edit files.",
   },
   {
     id: "canvas",
     title: "Canvas",
+    section: "How do I govern my agent?",
+    prompt_type: "reusable" as const,
     detail:
       "Use Canvas to generate interactive artifacts that render next to the chat.",
     example: "Create a canvas explaining what we did today.",
@@ -130,6 +171,8 @@ export const DECK_BEATS_101 = [
   {
     id: "mcp",
     title: "MCP / Figma",
+    section: "How do I govern my agent?",
+    prompt_type: "adaptable" as const,
     detail:
       "Ask Cursor to create a slideshow in Figma using MCP Servers. Enable a MCP server for slideshow generation in Cursor. Go to Customize > MCP > Figma.",
     example:
@@ -137,8 +180,33 @@ export const DECK_BEATS_101 = [
   },
 ] as const;
 
+export type DeckBeat101 = (typeof DECK_BEATS_101)[number];
+
 export function deckBeats101Sequence(): string {
   return DECK_BEATS_101.map((beat) => beat.title).join(" → ");
+}
+
+export function groupDeckBeats101BySection(): {
+  demo: number;
+  section: DeckBeat101["section"];
+  beats: DeckBeat101[];
+}[] {
+  const groups: {
+    demo: number;
+    section: DeckBeat101["section"];
+    beats: DeckBeat101[];
+  }[] = [];
+
+  for (const beat of DECK_BEATS_101) {
+    const last = groups[groups.length - 1];
+    if (last && last.section === beat.section) {
+      last.beats.push(beat);
+    } else {
+      groups.push({ demo: groups.length + 1, section: beat.section, beats: [beat] });
+    }
+  }
+
+  return groups;
 }
 
 export const DEMO_TRACKS = [

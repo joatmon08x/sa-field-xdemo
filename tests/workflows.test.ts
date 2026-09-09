@@ -1,7 +1,13 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { DECK_BEATS_101, DEMO_TRACKS, WORKFLOWS, deckBeats101Sequence } from "@/lib/workflows/meta";
+import {
+  DECK_BEATS_101,
+  DEMO_TRACKS,
+  WORKFLOWS,
+  deckBeats101Sequence,
+  groupDeckBeats101BySection,
+} from "@/lib/workflows/meta";
 
 const root = process.cwd();
 
@@ -124,6 +130,19 @@ describe("prompt sync", () => {
     expect(beat("mcp")?.title).toBe("MCP / Figma");
     expect(beat("mcp")?.detail).toContain("Customize > MCP > Figma");
     expect(example("mcp")).toContain("Figma Slides");
+
+    expect(DECK_BEATS_101.every((entry) => entry.prompt_type !== undefined)).toBe(true);
+    expect(beat("ask")?.prompt_type).toBe("reusable");
+    expect(beat("plan")?.prompt_type).toBe("adaptable");
+    expect(beat("agent-build")?.prompt_type).toBe("none");
+    expect(groupDeckBeats101BySection().map((group) => group.section)).toEqual([
+      "How do I write my first prompt?",
+      "How do I work with an AI agent?",
+      "How do I govern my agent?",
+    ]);
+    expect(
+      groupDeckBeats101BySection().flatMap((group) => group.beats.map((entry) => entry.id)),
+    ).toEqual(DECK_BEATS_101.map((entry) => entry.id));
 
     const loop = WORKFLOWS.find((workflow) => workflow.slug === "loop");
 

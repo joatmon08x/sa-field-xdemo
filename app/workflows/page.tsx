@@ -6,9 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  DECK_BEATS_101,
   DEMO_TRACKS,
   getWorkflow,
+  groupDeckBeats101BySection,
   type WorkflowMeta,
 } from "@/lib/workflows/meta";
 
@@ -87,6 +87,7 @@ function workflowsFor(slugs: readonly string[]) {
 
 export default function WorkflowsPage() {
   const track101 = DEMO_TRACKS.find((track) => track.id === "101");
+  const demoSections = groupDeckBeats101BySection();
 
   return (
     <div className="space-y-6">
@@ -99,6 +100,11 @@ export default function WorkflowsPage() {
             <Button asChild size="sm" variant="outline">
               <Link href="#track-101">101 track</Link>
             </Button>
+            {demoSections.map((group) => (
+              <Button key={group.section} asChild size="sm" variant="outline">
+                <Link href={`#demo-${group.demo}`}>Demo {group.demo}</Link>
+              </Button>
+            ))}
           </div>
         }
       />
@@ -112,21 +118,33 @@ export default function WorkflowsPage() {
             </p>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {DECK_BEATS_101.map((beat) => (
-              <Card key={beat.id} className="flex flex-col">
-                <CardContent className="flex flex-1 flex-col gap-3">
-                  <div className="space-y-1.5">
-                    <p className="font-medium">{beat.title}</p>
-                    <p className="text-xs leading-relaxed text-muted-foreground">{beat.detail}</p>
-                  </div>
-                  {"example" in beat && beat.example ? (
-                    <div className="mt-auto">
-                      <PasteBlock text={beat.example} compact={false} />
-                    </div>
-                  ) : null}
-                </CardContent>
-              </Card>
+          <div className="space-y-8">
+            {demoSections.map((group) => (
+              <section key={group.section} id={`demo-${group.demo}`} className="scroll-mt-6 space-y-3">
+                <div>
+                  <p className="text-xs font-medium tracking-[0.16em] text-indigo uppercase">
+                    Demo {group.demo}
+                  </p>
+                  <h3 className="mt-1 text-lg font-semibold tracking-tight">{group.section}</h3>
+                </div>
+                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                  {group.beats.map((beat) => (
+                    <Card key={beat.id} className="flex flex-col">
+                      <CardContent className="flex flex-1 flex-col gap-3">
+                        <div className="space-y-1.5">
+                          <p className="font-medium">{beat.title}</p>
+                          <p className="text-xs leading-relaxed text-muted-foreground">{beat.detail}</p>
+                        </div>
+                        {"example" in beat && beat.example ? (
+                          <div className="mt-auto">
+                            <PasteBlock text={beat.example} compact={false} />
+                          </div>
+                        ) : null}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
 
