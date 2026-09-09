@@ -55,7 +55,7 @@ describe("prompt sync", () => {
     );
     expect(skill).toContain(track101?.description ?? "");
     expect(deckBeats101Sequence()).toBe(
-      "Ask → Plan → Build in Agent mode → Debug → Change to a fast model → Fix the bug → Change to a deep model → Start and stop → Stop → Interrupt and steer → Build and review diffs → Create a project rule → Test the project rule → Create a project skill → Test the project skill → Canvas → MCP server",
+      "Ask → Plan → Build in Agent mode → Debug → Change to a fast model → Plan to fix the bug → Run Mode Allowlist → Change to a deep / intelligent model → Redact (partial) → Stop the prompt → Interrupt and steer → Review diffs → Create a user rule → Test the rule → Create a user skill → Test the skill → Canvas → MCP / Figma",
     );
 
     expect(DECK_BEATS_101.map((beat) => beat.id)).toEqual([
@@ -65,6 +65,7 @@ describe("prompt sync", () => {
       "debug",
       "model-fast",
       "fix",
+      "allowlist",
       "model-deep",
       "start-and-stop",
       "stop",
@@ -89,33 +90,39 @@ describe("prompt sync", () => {
     expect(example("plan")).toBe(
       "/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
     );
-    expect(example("agent-build")).toBe("Build the plan locally.");
+    expect("example" in beat("agent-build")!).toBe(false);
     expect(example("debug")).toBe("/debug the failing test");
-    expect(example("model-fast")).toBe("/model");
-    expect(example("fix")).toBe("Fix the bug.");
+    expect(example("model-fast")).toBe("/model.");
+    expect(example("fix")).toBe("/plan draft a plan to fix the bug");
+    expect("example" in beat("allowlist")!).toBe(false);
+    expect(beat("allowlist")?.detail).toBe(
+      "Go to Settings → Agents → Executions & Approvals → Run Mode → Allowlist.",
+    );
     expect(example("model-deep")).toBe("/model");
+    expect(beat("start-and-stop")?.title).toBe("Redact (partial)");
     expect(example("start-and-stop")).toBe(
       "Redact the customer email in the UI. The first two characters and domain are plaintext.",
     );
     expect("example" in beat("stop")!).toBe(false);
+    expect(beat("stop")?.detail).toBe("Stop the prompt with the Stop button.");
     expect(example("interrupt-steer")).toBe(
       "Redact the customer email in the UI. Show it in plaintext if I click an icon. Stop every time you change a file for me to review.",
     );
     expect("example" in beat("diffs")!).toBe(false);
     expect(example("rule")).toBe(
-      "/create-rule New features should use the new API instead of the legacy API.",
+      "/create-rule New features should use the new API instead of the legacy API. This is a personal rule.",
     );
     expect(example("test-rule")).toBe(
       "Add a new feature to show the current cap for dispute credit. Make clear which API you’re referencing.",
     );
     expect(example("skill")).toBe(
-      "/create-skill Use domain-driven design to break down the domains in this application and match it to available APIs or data schemas. Name it ddd.",
+      "/create-skill Use domain-driven design to break down the domains in this application and match it to available APIs or data schemas. This is a personal skill.",
     );
     expect(example("test-skill")).toBe("Use domain-driven design on this application. Do not edit files.");
     expect(beat("canvas")?.title).toBe("Canvas");
     expect(example("canvas")).toBe("Create a canvas explaining what we did today.");
-    expect(beat("mcp")?.title).toBe("MCP server");
-    expect(beat("mcp")?.detail).toContain("Customize → MCP");
+    expect(beat("mcp")?.title).toBe("MCP / Figma");
+    expect(beat("mcp")?.detail).toContain("Customize > MCP > Figma");
     expect(example("mcp")).toContain("Figma Slides");
 
     const loop = WORKFLOWS.find((workflow) => workflow.slug === "loop");

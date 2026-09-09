@@ -22,97 +22,103 @@ export const DECK_BEATS_101 = [
   {
     id: "ask",
     title: "Ask",
-    detail: "Read-only orientation before planning. Learn about the application.",
+    detail:
+      "Let’s ask questions about the application. In Ask mode, the agent understands the files. It is read-only.",
     example: "/ask Tell me what this application does in 3 sentences",
   },
   {
     id: "plan",
     title: "Plan",
-    detail: "Switch to Plan mode and scope the customer email feature.",
+    detail: "Let’s plan out the feature. In Plan mode, the agent maps its approach.",
     example: "/plan I want a new feature to update the customer email in the invoice detail customer card. Don’t implement email validation.",
   },
   {
     id: "agent-build",
     title: "Build in Agent mode",
-    detail: "Switch to Agent mode and implement the plan. Review the diff before accepting.",
-    example: "Build the plan locally.",
+    detail:
+      "Agent mode is the default. It makes the change. Build the plan locally. Check the feature in the UI.",
   },
   {
     id: "debug",
     title: "Debug",
-    detail: "Fix a bug with Debug mode on the failing test.",
+    detail:
+      "Let’s try to fix it using Debug mode. In Debug mode, you verify the change and investigate and fix any issues.",
     example: "/debug the failing test",
   },
   {
     id: "model-fast",
     title: "Change to a fast model",
-    detail: "Change to a faster model for a bug fix.",
-    example: "/model",
+    detail: "Let’s change the model to something faster. Change model from Auto to Fast.",
+    example: "/model.",
   },
   {
     id: "fix",
-    title: "Fix the bug",
-    detail: "Fix the bug with a faster model.",
-    example: "Fix the bug.",
+    title: "Plan to fix the bug",
+    detail: "Show shift-tab to toggle between modes.",
+    example: "/plan draft a plan to fix the bug",
+  },
+  {
+    id: "allowlist",
+    title: "Run Mode Allowlist",
+    detail: "Go to Settings → Agents → Executions & Approvals → Run Mode → Allowlist.",
   },
   {
     id: "model-deep",
-    title: "Change to a deep model",
-    detail: "Change to a deeper model for a more complex feature.",
+    title: "Change to a deep / intelligent model",
+    detail: "Change model to intelligent model.",
     example: "/model",
   },
   {
     id: "start-and-stop",
-    title: "Start and stop",
-    detail: "Start planning a new feature and stop it.",
+    title: "Redact (partial)",
+    detail:
+      "Update the email feature; security recommended redacting a portion of the customer email.",
     example: "Redact the customer email in the UI. The first two characters and domain are plaintext.",
   },
   {
     id: "stop",
-    title: "Stop",
-    detail: "Stop the plan.",
+    title: "Stop the prompt",
+    detail: "Stop the prompt with the Stop button.",
   },
   {
     id: "interrupt-steer",
     title: "Interrupt and steer",
-    detail: "Start planning a new feature, then edit inline and re-submit.",
+    detail: "Steer the prompt. Show how the agent pauses for your approval. Continue each file.",
     example: "Redact the customer email in the UI. Show it in plaintext if I click an icon. Stop every time you change a file for me to review.",
   },
   {
     id: "diffs",
-    title: "Build and review diffs",
-    detail: "Review the changes from the agent's last turn under Changes.",
+    title: "Review diffs",
+    detail: "Show diffs from agent’s last turn.",
   },
   {
     id: "rule",
-    title: "Create a project rule",
+    title: "Create a user rule",
     detail:
-      "Use /create-rule to add a project rule, which defines what the agent must do. Review the rule in Customize -> Rules.",
+      "Let’s create a user rule so the agent doesn’t do it again. Show the user rule in the UI and how it can be changed.",
     example:
-      "/create-rule New features should use the new API instead of the legacy API.",
+      "/create-rule New features should use the new API instead of the legacy API. This is a personal rule.",
   },
   {
     id: "test-rule",
-    title: "Test the project rule",
-    detail:
-      "Run a prompt to check the rule is applied.",
+    title: "Test the rule",
+    detail: "Check the rule is applied.",
     example:
       "Add a new feature to show the current cap for dispute credit. Make clear which API you’re referencing.",
   },
   {
     id: "skill",
-    title: "Create a project skill",
+    title: "Create a user skill",
     detail:
-      "Use /create-skill to add a project skill, which defines how the agent must do something. Review the rule in Customize -> Skills.",
-    example: "/create-skill Use domain-driven design to break down the domains in this application and match it to available APIs or data schemas. Name it ddd.",
+      "Let’s create a user skill that tells me the domain breakdown and available APIs. Show the user skill in the UI and how it can be changed.",
+    example:
+      "/create-skill Use domain-driven design to break down the domains in this application and match it to available APIs or data schemas. This is a personal skill.",
   },
   {
     id: "test-skill",
-    title: "Test the project skill",
-    detail:
-      "Run a prompt to use the skill.",
-    example:
-      "Use domain-driven design on this application. Do not edit files.",
+    title: "Test the skill",
+    detail: "Use the skill (no file edits).",
+    example: "Use domain-driven design on this application. Do not edit files.",
   },
   {
     id: "canvas",
@@ -123,9 +129,9 @@ export const DECK_BEATS_101 = [
   },
   {
     id: "mcp",
-    title: "MCP server",
+    title: "MCP / Figma",
     detail:
-      "Enable a MCP server for slideshow generation in Cursor. Go to Customize → MCP -> Figma.",
+      "Ask Cursor to create a slideshow in Figma using MCP Servers. Enable a MCP server for slideshow generation in Cursor. Go to Customize > MCP > Figma.",
     example:
       "Create three slides in Figma Slides outlining how I used Cursor to develop a new feature. I want to use this as part of my demo showcase.",
   },
