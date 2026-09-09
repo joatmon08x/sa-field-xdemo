@@ -9,7 +9,7 @@ import {
 import {
   generateStaticParams as generateCommandParams,
 } from "@/app/runbooks/commands/[slug]/page";
-import { RUNBOOKS, RUNBOOK_TRACKS } from "@/lib/runbooks/meta";
+import { RUNBOOKS, RUNBOOK_TRACKS, runbookSectionHref, runbookTrackHref } from "@/lib/runbooks/meta";
 
 const request = new Request("http://localhost/api/runbooks");
 const trackParams = (track: string) => ({ params: Promise.resolve({ track }) });
@@ -117,6 +117,16 @@ describe("runbooks redirects", () => {
         { source: "/analysis", destination: "/runbooks/101", permanent: false },
         { source: "/analysis/:path*", destination: "/runbooks/101", permanent: false },
       ]),
+    );
+  });
+});
+
+describe("runbooks catalog hrefs", () => {
+  it("builds track and section-header links", () => {
+    expect(runbookTrackHref("101")).toBe("/runbooks/101");
+    expect(runbookSectionHref("101", "first-prompt")).toBe("/runbooks/101#first-prompt");
+    expect(runbookSectionHref("advanced", "cursor-cli-primer")).toBe(
+      "/runbooks/advanced#cursor-cli-primer",
     );
   });
 });

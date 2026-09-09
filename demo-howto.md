@@ -4,7 +4,7 @@ Presenter run-of-show, not a course. There are two tracks, and every step stands
 
 Ledgerly is a small, fictional demo app. It exists to give Cursor enablement steps a visible surface: code to read, a UI to inspect, a scoped error to fix, and tests to verify. The data is synthetic. Avery Quinn is the operator, the only plan prices are Starter **$49**, Growth **$99**, and Scale **$249**, and the clock is frozen at **23 August 2026** so every run is repeatable.
 
-The pastes below match the copy-paste blocks on `/workflows`. Deck and CLI cards show the full step text. Workflow command cards show the full `prompt` from `lib/workflows/meta.ts`. The short `/command Read the … entry` lines are the slug-page demo prompts — the test requires them verbatim here.
+The pastes below match the copy-paste blocks on `/runbooks`. Deck and CLI cards show the full step text. Runbook command cards show the full `prompt` from `lib/runbooks/meta.ts`. The short `/command Read the … entry` lines are the slug-page demo prompts — the test requires them verbatim here.
 
 ## Jump menu
 
@@ -409,12 +409,12 @@ Run one, or jump directly to the one named in the deck discussion.
 **Short prompt:**
 
 ```text
-/multitask Read the multitask entry in WORKFLOWS from lib/workflows/meta.ts and run its prompt exactly.
+/multitask Read the multitask entry in RUNBOOKS from lib/runbooks/meta.ts and run its prompt exactly.
 ```
 
 **Detailed prompt:** [Open `/workflows/multitask`](http://127.0.0.1:43173/workflows/multitask)
 
-**Fallback:** If Cursor does not open `lib/workflows/meta.ts`, use **Copy full prompt** on that page.
+**Fallback:** If Cursor does not open `lib/runbooks/meta.ts`, use **Copy full prompt** on that page.
 
 **Look for:** Four `api-instrumenter` launches in one turn. A shared helper under `lib/`. `ledgerly-reviewer` after the diffs. No price or seed edits.
 
@@ -429,12 +429,12 @@ Run one, or jump directly to the one named in the deck discussion.
 **Short prompt:**
 
 ```text
-/loop Read the loop entry in WORKFLOWS from lib/workflows/meta.ts and run its prompt exactly.
+/loop Read the loop entry in RUNBOOKS from lib/runbooks/meta.ts and run its prompt exactly.
 ```
 
 **Detailed prompt:** [Open `/workflows/loop`](http://127.0.0.1:43173/workflows/loop)
 
-**Fallback:** If Cursor does not open `lib/workflows/meta.ts`, use **Copy full prompt** on that page.
+**Fallback:** If Cursor does not open `lib/runbooks/meta.ts`, use **Copy full prompt** on that page.
 
 **Look for:** The paste starts with `/loop 10s`. `idle` → `running` → `complete`. Nothing written to SQLite. No GitHub Actions. Dev server must be on 43173.
 
@@ -453,12 +453,12 @@ The 201 deck calls this `/babysit`. The current supported name is `/autopilot`.
 **Short prompt:**
 
 ```text
-/autopilot Read the autopilot entry in WORKFLOWS from lib/workflows/meta.ts and run its prompt exactly.
+/autopilot Read the autopilot entry in RUNBOOKS from lib/runbooks/meta.ts and run its prompt exactly.
 ```
 
 **Detailed prompt:** [Open `/workflows/autopilot`](http://127.0.0.1:43173/workflows/autopilot)
 
-**Fallback:** If Cursor does not open `lib/workflows/meta.ts`, use **Copy full prompt** on that page.
+**Fallback:** If Cursor does not open `lib/runbooks/meta.ts`, use **Copy full prompt** on that page.
 
 **Look for:** If there is no open PR, the agent stops and says so. Otherwise: fresh PR state on every pass. Conflicts first, then active comments, then CI. Findings are validated rather than obeyed blindly. No CI weakening or unrelated fixes. The run stops at merge-ready. Does not open or merge a PR.
 
@@ -473,12 +473,12 @@ The 201 deck calls this `/babysit`. The current supported name is `/autopilot`.
 **Short prompt:**
 
 ```text
-/goal Read the goal entry in WORKFLOWS from lib/workflows/meta.ts and run its prompt exactly.
+/goal Read the goal entry in RUNBOOKS from lib/runbooks/meta.ts and run its prompt exactly.
 ```
 
 **Detailed prompt:** [Open `/workflows/goal`](http://127.0.0.1:43173/workflows/goal)
 
-**Fallback:** If Cursor does not open `lib/workflows/meta.ts`, use **Copy full prompt** on that page.
+**Fallback:** If Cursor does not open `lib/runbooks/meta.ts`, use **Copy full prompt** on that page.
 
 **Look for:** Suggested credit on dsp_1043 at **$249** from v2. Both routes remain. `npm test` is green. `dispute-verifier` reports evidence. Seed and `tests/suggested-credit-api.test.ts` are untouched.
 
@@ -497,12 +497,12 @@ Need `bun` on PATH and a `CURSOR_API_KEY` (personal key or team service account,
 **Short prompt:**
 
 ```text
-/orchestrate Read the orchestrate entry in WORKFLOWS from lib/workflows/meta.ts and run its prompt exactly.
+/orchestrate Read the orchestrate entry in RUNBOOKS from lib/runbooks/meta.ts and run its prompt exactly.
 ```
 
 **Detailed prompt:** [Open `/workflows/orchestrate`](http://127.0.0.1:43173/workflows/orchestrate)
 
-**Fallback:** If Cursor does not open `lib/workflows/meta.ts`, use **Copy full prompt** on that page.
+**Fallback:** If Cursor does not open `lib/runbooks/meta.ts`, use **Copy full prompt** on that page.
 
 **Look for:** Planner does not write product code. Three workers, then `dispute-verifier`. Same finish line as `/goal`.
 
